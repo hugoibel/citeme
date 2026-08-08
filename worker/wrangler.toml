@@ -1,0 +1,20 @@
+name = "citeme-api"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+# Dominios desde los que se puede llamar al backend (separados por comas).
+ORIGENES = "https://hugoibel.github.io,http://localhost:8080"
+# Consultas por IP y día. Cada análisis de 4 preguntas gasta ~9.
+LIMITE_DIA = "60"
+# MODELO = "gemini-2.5-flash"   # descomenta para fijarlo a mano
+
+# La clave NO va aquí (es un secreto):
+#   npx wrangler secret put GEMINI_KEY
+#
+# Límite por IP de verdad (opcional, recomendado al abrirlo al público):
+#   npx wrangler kv namespace create CUOTA
+# y pega el id que te devuelva:
+# [[kv_namespaces]]
+# binding = "CUOTA"
+# id = "..."

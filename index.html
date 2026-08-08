@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cítame · ¿Te recomienda la IA a tus clientes?</title>
-<meta name="description" content="Descubre gratis si ChatGPT, Gemini y Perplexity recomiendan tu negocio cuando un cliente pregunta por tu sector en tu ciudad. Informe con las fuentes reales que lee la IA.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+<title>CiteMe · Does AI recommend your business?</title>
+<meta name="description" content="Find out for free whether ChatGPT, Gemini and Perplexity recommend your business when a customer asks for your service in your city. See who they recommend instead — and the exact sources AI reads to decide.">
+<meta property="og:title" content="CiteMe · Does AI recommend your business?">
+<meta property="og:description" content="98.8% of local businesses are invisible to AI. Check yours in 60 seconds.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b5cff' stroke-width='2.4' stroke-linecap='round'><path d='M12 20v-7'/><path d='M8.5 9.5a5 5 0 0 1 7 0'/><path d='M5.5 6.2a9.5 9.5 0 0 1 13 0'/><circle cx='12' cy='12.5' r='1.4' fill='%231b5cff' stroke='none'/></svg>">
 <style>
 :root{
   --bg:#f6f7f9; --panel:#ffffff; --ink:#0f1729; --ink-soft:#5a6478; --line:#e4e7ee;
@@ -21,61 +24,51 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{
-  background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased; overflow-x:hidden;
-}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--brand)}
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
 header.top{padding:22px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;font-size:19px}
-.logo .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(140deg,var(--brand),#8a5bff);display:grid;place-items:center;color:#fff;font-size:15px}
-.btn{
-  border:1px solid transparent;border-radius:12px;padding:12px 18px;font-weight:650;font-size:15px;
-  cursor:pointer;font-family:inherit;transition:.15s transform,.15s box-shadow,.15s background;
-}
+.logo .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(140deg,var(--brand),#8a5bff);display:grid;place-items:center}
+.top-r{display:flex;align-items:center;gap:8px}
+.lang{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.lang button{border:0;background:transparent;color:var(--ink-soft);font:inherit;font-size:13px;font-weight:650;padding:8px 11px;cursor:pointer}
+.lang button.on{background:var(--brand);color:#fff}
+.btn{border:1px solid transparent;border-radius:12px;padding:12px 18px;font-weight:650;font-size:15px;cursor:pointer;
+  font-family:inherit;transition:.15s transform,.15s box-shadow,.15s background}
 .btn:active{transform:translateY(1px)}
 .btn-primary{background:var(--brand);color:#fff;box-shadow:0 8px 20px -8px rgba(27,92,255,.8)}
 .btn-primary:hover{filter:brightness(1.06)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
 .btn-ghost{background:transparent;color:var(--ink-soft);border-color:var(--line)}
 .btn-ghost:hover{color:var(--ink);border-color:var(--ink-soft)}
-
-/* HERO */
-.hero{padding:38px 0 10px;max-width:760px}
+.hero{padding:38px 0 10px;max-width:770px}
 .kicker{display:inline-flex;align-items:center;gap:8px;background:var(--brand-soft);color:var(--brand);
   font-weight:650;font-size:13px;padding:6px 12px;border-radius:999px;margin-bottom:18px}
 h1{font-size:clamp(30px,5.2vw,50px);line-height:1.06;letter-spacing:-.035em;margin:0 0 16px;font-weight:800}
 h1 em{font-style:normal;background:linear-gradient(180deg,transparent 62%,rgba(27,92,255,.22) 62%);
   -webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .06em}
-.sub{font-size:clamp(16px,2.2vw,19px);color:var(--ink-soft);margin:0 0 8px;max-width:62ch}
+.sub{font-size:clamp(16px,2.2vw,19px);color:var(--ink-soft);margin:0;max-width:62ch}
 .stats{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 6px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;flex:1 1 210px}
 .stat b{font-size:19px;letter-spacing:-.02em}
 .stat span{display:block;font-size:12.5px;color:var(--ink-soft)}
-
-/* CARD / FORM */
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
 .form{margin:26px 0 40px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:640px){.grid2{grid-template-columns:1fr}}
 label{display:block;font-size:13px;font-weight:650;color:var(--ink-soft);margin:0 0 6px}
-input,select,textarea{
-  width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:var(--bg);
-  color:var(--ink);font:inherit;font-size:15px;outline:0;transition:.15s border-color,.15s box-shadow
-}
+input,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:var(--bg);
+  color:var(--ink);font:inherit;font-size:15px;outline:0;transition:.15s border-color,.15s box-shadow}
 input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
 .row-actions{display:flex;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
 .hint{font-size:13px;color:var(--ink-soft)}
 .hint code{font-family:var(--mono);font-size:12px;background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:5px}
-
-/* PROGRESO */
 #progress{display:none;margin:0 0 40px}
 .bar{height:8px;background:var(--bg);border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:14px 0 10px}
 .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),#8a5bff);transition:width .4s}
 .log{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);max-height:150px;overflow:auto;white-space:pre-wrap}
-
-/* RESULTADO */
 #result{display:none;margin-bottom:60px}
 .score-head{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
 .gauge{position:relative;width:150px;height:150px;flex:0 0 auto}
@@ -88,10 +81,10 @@ input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--br
 .verdict p{margin:0;color:var(--ink-soft)}
 .tag{display:inline-block;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:10px}
 .t-bad{background:var(--bad-soft);color:var(--bad)} .t-warn{background:var(--warn-soft);color:var(--warn)} .t-ok{background:var(--ok-soft);color:var(--ok)}
-
 section.block{margin-top:26px}
 section.block h3{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-soft);margin:0 0 12px;font-weight:700}
-table{width:100%;border-collapse:collapse;font-size:14.5px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:520px}
 th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);
    padding:0 10px 8px;border-bottom:1px solid var(--line);font-weight:700}
 td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -105,7 +98,6 @@ tr:last-child td{border-bottom:0}
 .rank .n{width:26px;height:26px;border-radius:8px;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font-size:12.5px;font-weight:700;flex:0 0 auto}
 .rank .nm{flex:1;font-weight:600}
 .rank .ct{font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
-.rank.me{background:var(--brand-soft);margin:0 -10px;padding:9px 10px;border-radius:10px;border-bottom:0}
 .srcs{display:flex;flex-wrap:wrap;gap:8px}
 .src{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:13px;display:flex;gap:7px;align-items:center}
 .src b{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-weight:600;font-size:12px}
@@ -116,14 +108,12 @@ ol.plan li::before{content:counter(p);position:absolute;left:0;top:-1px;width:28
   background:var(--brand);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
 ol.plan b{display:block;margin-bottom:3px}
 ol.plan span{color:var(--ink-soft);font-size:14.5px}
-
 .cta{margin-top:28px;background:linear-gradient(140deg,var(--brand),#8a5bff);color:#fff;border-radius:var(--radius);padding:26px}
 .cta h3{color:#fff;text-transform:none;letter-spacing:-.02em;font-size:21px;margin:0 0 6px}
-.cta p{margin:0 0 16px;opacity:.9;font-size:15px;max-width:60ch}
+.cta p{margin:0 0 16px;opacity:.92;font-size:15px;max-width:60ch}
 .cta .btn{background:#fff;color:#1b2a4a}
 .cta .btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
 .cta .btn-ghost:hover{background:rgba(255,255,255,.12);color:#fff}
-
 .planes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
 @media(max-width:640px){.planes{grid-template-columns:1fr}}
 .plan-c{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:relative}
@@ -145,9 +135,9 @@ dialog p{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
 .err{background:var(--bad-soft);color:var(--bad);border-radius:11px;padding:12px 14px;font-size:14px;margin-top:14px;display:none}
 @media print{
   body{background:#fff;color:#000}
-  header.top,.hero,.form,#progress,.cta,footer,.noprint{display:none!important}
+  header.top,.hero,.form,#progress,.cta,.planes,footer,.noprint{display:none!important}
   #result{display:block!important}
-  .card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  .card{box-shadow:none;border:1px solid #ddd}
   section.block{break-inside:avoid}
 }
 </style>
@@ -156,54 +146,44 @@ dialog p{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
 
 <div class="wrap">
   <header class="top">
-    <div class="logo"><span class="dot"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 20v-7"/><path d="M8.5 9.5a5 5 0 0 1 7 0"/><path d="M5.5 6.2a9.5 9.5 0 0 1 13 0"/><circle cx="12" cy="12.5" r="1.4" fill="#fff" stroke="none"/></svg></span> Cítame</div>
-    <button class="btn btn-ghost" id="btnCfg">Ajustes</button>
+    <div class="logo">
+      <span class="dot"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 20v-7"/><path d="M8.5 9.5a5 5 0 0 1 7 0"/><path d="M5.5 6.2a9.5 9.5 0 0 1 13 0"/><circle cx="12" cy="12.5" r="1.4" fill="#fff" stroke="none"/></svg></span>
+      CiteMe
+    </div>
+    <div class="top-r">
+      <div class="lang"><button data-lang="en">EN</button><button data-lang="es">ES</button></div>
+      <button class="btn btn-ghost" id="btnCfg" data-t="ajustes"></button>
+    </div>
   </header>
 
   <div class="hero">
-    <span class="kicker">● Análisis en vivo · ChatGPT · Gemini · Perplexity</span>
-    <h1>Tus clientes ya no buscan en Google.<br>Le preguntan a la IA. <em>¿Te recomienda?</em></h1>
-    <p class="sub">Comprobamos en tiempo real qué contesta la inteligencia artificial cuando alguien busca lo que tú vendes, en tu ciudad. Y te decimos exactamente por qué recomienda a otros y no a ti.</p>
+    <span class="kicker" data-t="kicker"></span>
+    <h1 id="h1"></h1>
+    <p class="sub" data-t="sub"></p>
     <div class="stats">
-      <div class="stat"><b>1,2%</b><span>de negocios locales recomendados por ChatGPT</span></div>
-      <div class="stat"><b>45%</b><span>ya usa IA para buscar negocios (era 6%)</span></div>
-      <div class="stat"><b>9×</b><span>más conversión que el tráfico de Google</span></div>
+      <div class="stat"><b>1.2%</b><span data-t="stat1"></span></div>
+      <div class="stat"><b>6% → 45%</b><span data-t="stat2"></span></div>
+      <div class="stat"><b>9×</b><span data-t="stat3"></span></div>
     </div>
   </div>
 
   <div class="card form" id="form">
     <div class="grid2">
-      <div>
-        <label for="fNombre">Nombre del negocio</label>
-        <input id="fNombre" placeholder="Clínica Dental Sonrisa" autocomplete="off">
-      </div>
-      <div>
-        <label for="fCiudad">Ciudad o zona</label>
-        <input id="fCiudad" placeholder="Murcia" autocomplete="off">
-      </div>
-      <div>
-        <label for="fActividad">¿A qué se dedica?</label>
-        <input id="fActividad" placeholder="clínica dental / implantes" autocomplete="off">
-      </div>
-      <div>
-        <label for="fPreguntas">Profundidad del análisis</label>
-        <select id="fPreguntas">
-          <option value="4">Rápido · 4 preguntas (gratis)</option>
-          <option value="10" selected>Estándar · 10 preguntas</option>
-          <option value="15">Informe completo · 15 preguntas</option>
-        </select>
-      </div>
+      <div><label for="fNombre" data-t="lNombre"></label><input id="fNombre" autocomplete="off"></div>
+      <div><label for="fCiudad" data-t="lCiudad"></label><input id="fCiudad" autocomplete="off"></div>
+      <div><label for="fActividad" data-t="lActividad"></label><input id="fActividad" autocomplete="off"></div>
+      <div><label for="fPreguntas" data-t="lProf"></label><select id="fPreguntas"></select></div>
     </div>
     <div class="row-actions">
-      <button class="btn btn-primary" id="btnGo">Analizar mi negocio</button>
-      <button class="btn btn-ghost" id="btnDemo">Ver un ejemplo</button>
+      <button class="btn btn-primary" id="btnGo" data-t="bAnalizar"></button>
+      <button class="btn btn-ghost" id="btnDemo" data-t="bEjemplo"></button>
       <span class="hint" id="hintKey"></span>
     </div>
     <div class="err" id="err"></div>
   </div>
 
   <div class="card" id="progress">
-    <b id="pTitle">Consultando a la IA…</b>
+    <b id="pTitle"></b>
     <div class="bar"><i id="pBar"></i></div>
     <div class="log" id="pLog"></div>
   </div>
@@ -211,137 +191,243 @@ dialog p{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
   <div id="result"></div>
 
   <footer>
-    <b>Cítame</b> — visibilidad de negocios en buscadores de IA. Los datos se consultan en vivo y no se almacenan en ningún servidor.
-    <span class="noprint">· Fuentes de mercado: SOCi Local Visibility Index 2026, Similarweb, Adobe.</span>
+    <b>CiteMe</b> — <span data-t="footer"></span>
   </footer>
 </div>
 
 <dialog id="dlg">
-  <h3>Ajustes</h3>
-  <p>Necesitas una clave de Google AI Studio (gratis, 5.000 consultas al mes). Se guarda solo en este navegador.</p>
-  <label for="cKey">Clave de API de Google Gemini</label>
+  <h3 data-t="dlgT"></h3>
+  <p data-t="dlgP"></p>
+  <label for="cKey" data-t="dlgKey"></label>
   <input id="cKey" placeholder="AIza…" autocomplete="off" spellcheck="false">
-  <p class="hint" style="margin:8px 0 16px">Consíguela en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> → "Create API key".</p>
-  <label for="cModel">Modelo</label>
-  <select id="cModel"><option value="">(detectar automáticamente)</option></select>
+  <p class="hint" style="margin:8px 0 16px"><span data-t="dlgGet"></span> <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a></p>
+  <label for="cModel" data-t="dlgModel"></label>
+  <select id="cModel"><option value=""></option></select>
   <div class="row-actions">
-    <button class="btn btn-primary" id="cSave">Guardar</button>
-    <button class="btn btn-ghost" id="cClose">Cerrar</button>
-    <button class="btn btn-ghost" id="cList">Detectar modelos</button>
+    <button class="btn btn-primary" id="cSave" data-t="dlgSave"></button>
+    <button class="btn btn-ghost" id="cClose" data-t="dlgClose"></button>
+    <button class="btn btn-ghost" id="cList" data-t="dlgDetect"></button>
   </div>
 </dialog>
 
 <script>
 "use strict";
+
+/* ═══════════ CONFIGURACIÓN ═══════════
+   BACKEND: URL del Cloudflare Worker. Con esto puesto, la web funciona para
+   cualquiera sin pedir clave. Vacío = modo privado (cada uno pone su clave). */
+const BACKEND  = localStorage.getItem('citeme_backend') || "";
+const CONTACTO = { whatsapp:"", email:"hello@citeme.app" };   // ← pon tu WhatsApp (1XXXXXXXXXX) y tu correo
+const PRECIOS  = { informe:"$99", vigilancia:"$49" };
+/* ════════════════════════════════════ */
+
 const $ = s => document.querySelector(s);
-const LS = { key:'citame_key', model:'citame_model' };
+const LS = { key:'citeme_key', model:'citeme_model', lang:'citeme_lang' };
 const API = 'https://generativelanguage.googleapis.com/v1beta';
+let CFG = { key:localStorage.getItem(LS.key)||'', model:localStorage.getItem(LS.model)||'',
+            lang:localStorage.getItem(LS.lang) || ((navigator.language||'en').toLowerCase().startsWith('es')?'es':'en') };
 
-let CFG = { key: localStorage.getItem(LS.key) || '', model: localStorage.getItem(LS.model) || '' };
+/* ─────────── textos ─────────── */
+const T = {
+en:{
+  ajustes:"Settings", kicker:"● Live check · ChatGPT · Gemini · Perplexity",
+  h1:'Your customers stopped googling.<br>They ask AI now. <em>Does it recommend you?</em>',
+  sub:"We ask AI in real time what it answers when someone looks for what you sell, in your city — and show you exactly why it recommends others instead of you.",
+  stat1:"of local businesses are recommended by ChatGPT",
+  stat2:"of people now use AI to find local businesses",
+  stat3:"higher conversion than Google traffic",
+  lNombre:"Business name", lCiudad:"City", lActividad:"What do you do?", lProf:"Depth of the check",
+  phNombre:"Sunrise Dental Care", phCiudad:"Miami, FL", phActividad:"dental clinic / implants",
+  opt:["Quick · 4 questions (free)","Standard · 10 questions","Full report · 15 questions"],
+  bAnalizar:"Check my business", bEjemplo:"See a sample report",
+  keyOk:"Key saved · model", keyNo:"No key yet → hit <b>Settings</b> (it's free)", backendOn:"Ready — no setup needed",
+  faltan:"Fill in name, city and what you do.", analizando:"Checking",
+  gen:"▸ Writing the questions a real customer would ask…", listas:"questions ready.",
+  cita:"✅ CITES YOU", nocita:"❌ doesn't cite you", errq:"error on",
+  sinDatos:"Couldn't complete any query. Check the key in Settings.",
+  tagBad:"INVISIBLE TO AI", tagWarn:"WEAK VISIBILITY", tagOk:"WELL POSITIONED",
+  titBad:"AI does not recommend your business", titWarn:"You show up, but behind your competitors",
+  titOk:"AI is already sending you customers",
+  subBad:(n,c,a,city)=>`Out of ${n} questions a ${city} customer would ask, AI named you in ${c}. People searching for "${a}" are being sent to other businesses.`,
+  subWarn:(n,c)=>`You're mentioned in ${c} of ${n} questions, but rarely first. The first recommendation takes most of the clicks.`,
+  subOk:(n,c)=>`You're mentioned in ${c} of ${n} questions and in good positions. Now defend it: this shifts every month.`,
+  s1:"What AI answers, question by question", th1:"Customer question", th2:"Do you show up?", th3:"Who it recommends",
+  pSi:"Yes · #", pNo:"Not listed",
+  s2:"Who is taking your customers", of:"of", questions:"questions",
+  s3:"The sources AI reads to recommend in your industry", s3b:"— this is where you need to be",
+  s4:"Your action plan",
+  p1t:"Get a page AI can actually cite",
+  p1d:(n,a,c)=>`AI only recommends what it can read and verify. You need a page with the exact name "${n}", address, phone, hours and a plain list of your ${a} services in ${c} — written as answers to the questions above.`,
+  p2t:s=>`Get listed on the sources AI consults (${s})`,
+  p2d:"These are the sites AI pulls its recommendations from in your industry and city. Being listed there with a complete profile is the fastest lever — you don't have to outrank anyone, you just have to be where it already reads.",
+  p3t:"Identical name, address and phone everywhere",
+  p3d:"Any mismatch between Google, your site and directories breaks the match and AI drops the listing as unreliable. One format, copied everywhere.",
+  p4t:"Answer the questions you're failing today",
+  p4d:q=>`Publish an FAQ that literally answers ${q}. Models quote text that already comes shaped as an answer.`,
+  p5t:n=>`Study why ${n} shows up`,
+  p5d:"Look at where it's listed, what reviews it has and what info it gives that you don't. No guessing needed — AI already told you who it prefers.",
+  p6t:"Measure again in 30 days",
+  p6d:"Without measuring you can't tell if any of it worked. The number that matters is how many questions name you, and in what position.",
+  ctaT:"This changes every month",
+  ctaP:"AI answers get rewritten constantly: today you're out, tomorrow you could be first — or the other way around. Monthly tracking tells you when you enter, when you drop and which competitor passed you.",
+  bPdf:"Download this report as PDF", bOtro:"Check another business",
+  pl1:"Full report", pl1s:"one-time", pl1i:["15 real customer questions","Head-to-head with your competitors","The sources AI reads in your industry","Written action plan"], pl1b:"I want it",
+  pl2:"Monthly tracking", pl2s:"/month", pl2i:["Everything in the report, every month","Alert when you appear or vanish","Alert when a competitor passes you","No contract"], pl2b:"Start", pl2e:"Most popular",
+  msg:(n,c,p)=>`Hi, I ran the AI check for "${n}" (${c}) and I'd like: ${p}.`,
+  footer:"AI visibility for local businesses. Everything is checked live; nothing is stored on a server.",
+  dlgT:"Settings", dlgP:"You need a Google AI Studio key (free, 5,000 checks a month). It's stored only in this browser.",
+  dlgKey:"Google Gemini API key", dlgGet:"Get one at", dlgModel:"Model", dlgAuto:"(auto-detect)",
+  dlgSave:"Save", dlgClose:"Close", dlgDetect:"Detect models",
+  errKey:"Invalid key, or the model doesn't support search. Open Settings → Detect models.",
+  needKey:"Add your free Google AI Studio key first.",
+  lang:"English", pago:"paid plan"
+},
+es:{
+  ajustes:"Ajustes", kicker:"● Análisis en vivo · ChatGPT · Gemini · Perplexity",
+  h1:'Tus clientes ya no buscan en Google.<br>Le preguntan a la IA. <em>¿Te recomienda?</em>',
+  sub:"Comprobamos en vivo qué contesta la inteligencia artificial cuando alguien busca lo que tú vendes, en tu ciudad. Y te decimos exactamente por qué recomienda a otros y no a ti.",
+  stat1:"de los negocios locales son recomendados por ChatGPT",
+  stat2:"ya usa la IA para buscar negocios locales",
+  stat3:"más conversión que el tráfico de Google",
+  lNombre:"Nombre del negocio", lCiudad:"Ciudad", lActividad:"¿A qué se dedica?", lProf:"Profundidad del análisis",
+  phNombre:"Clínica Dental Sonrisa", phCiudad:"Miami, FL", phActividad:"clínica dental / implantes",
+  opt:["Rápido · 4 preguntas (gratis)","Estándar · 10 preguntas","Informe completo · 15 preguntas"],
+  bAnalizar:"Analizar mi negocio", bEjemplo:"Ver un informe de ejemplo",
+  keyOk:"Clave guardada · modelo", keyNo:"Sin clave todavía → pulsa <b>Ajustes</b> (es gratis)", backendOn:"Listo para usar, sin configurar nada",
+  faltan:"Rellena nombre, ciudad y actividad.", analizando:"Analizando",
+  gen:"▸ Generando las preguntas que haría un cliente real…", listas:"preguntas listas.",
+  cita:"✅ TE CITA", nocita:"❌ no te cita", errq:"error en",
+  sinDatos:"No se pudo completar ninguna consulta. Revisa la clave en Ajustes.",
+  tagBad:"INVISIBLE PARA LA IA", tagWarn:"VISIBILIDAD DÉBIL", tagOk:"BIEN POSICIONADO",
+  titBad:"La IA no recomienda tu negocio", titWarn:"Apareces, pero por detrás de tus competidores",
+  titOk:"La IA ya te está mandando clientes",
+  subBad:(n,c,a,city)=>`De ${n} preguntas que haría un cliente de ${city}, la IA te ha nombrado en ${c}. Los que buscan "${a}" están siendo enviados a otros negocios.`,
+  subWarn:(n,c)=>`Te menciona en ${c} de ${n} preguntas, pero casi nunca en primer lugar. La primera recomendación se lleva la mayor parte de las visitas.`,
+  subOk:(n,c)=>`Te menciona en ${c} de ${n} preguntas y en buenas posiciones. Ahora toca defenderlo: esto se mueve cada mes.`,
+  s1:"Qué contesta la IA, pregunta por pregunta", th1:"Pregunta del cliente", th2:"¿Sales tú?", th3:"A quién recomienda",
+  pSi:"Sí · nº ", pNo:"No apareces",
+  s2:"Quién se está quedando tus clientes", of:"de", questions:"preguntas",
+  s3:"Las fuentes que la IA lee para recomendar en tu sector", s3b:"— aquí es donde tienes que estar",
+  s4:"Tu plan de acción",
+  p1t:"Consigue una página que la IA pueda citar",
+  p1d:(n,a,c)=>`La IA solo recomienda lo que puede leer y verificar. Necesitas una página con el nombre exacto "${n}", dirección, teléfono, horario y una lista clara de tus servicios de ${a} en ${c} — escrita como respuestas a las preguntas de arriba.`,
+  p2t:s=>`Date de alta en las fuentes que la IA consulta (${s})`,
+  p2d:"Son las webs de las que la IA saca sus recomendaciones en tu sector y tu ciudad. Estar ahí con la ficha completa es la palanca más rápida: no tienes que superar a nadie, solo estar donde ya lee.",
+  p3t:"Nombre, dirección y teléfono idénticos en todas partes",
+  p3d:"Cualquier variación entre Google, tu web y los directorios rompe la identificación y la IA descarta la ficha por dudosa. Un solo formato, copiado en todos los sitios.",
+  p4t:"Responde a las preguntas que hoy fallas",
+  p4d:q=>`Publica unas preguntas frecuentes que contesten literalmente ${q}. Los modelos citan textos que ya vienen en formato de respuesta.`,
+  p5t:n=>`Estudia por qué sale ${n}`,
+  p5d:"Mira dónde está publicado, qué reseñas tiene y qué información da que tú no das. No hace falta adivinar: la IA ya te ha dicho a quién prefiere.",
+  p6t:"Vuelve a medir dentro de 30 días",
+  p6d:"Sin medir no sabes si ha funcionado. El indicador que importa es en cuántas preguntas te nombra y en qué puesto.",
+  ctaT:"Esto cambia cada mes",
+  ctaP:"Las respuestas de la IA se reescriben constantemente: hoy no sales, mañana puedes salir el primero — o al revés. La vigilancia mensual te avisa cuando entras, cuando caes y qué competidor te ha adelantado.",
+  bPdf:"Descargar este informe en PDF", bOtro:"Analizar otro negocio",
+  pl1:"Informe completo", pl1s:"pago único", pl1i:["15 preguntas reales de cliente","Comparativa con tus competidores","Las fuentes que lee la IA en tu sector","Plan de acción por escrito"], pl1b:"Lo quiero",
+  pl2:"Vigilancia mensual", pl2s:"/mes", pl2i:["Todo lo del informe, cada mes","Aviso cuando entras o desapareces","Aviso si un competidor te adelanta","Sin permanencia"], pl2b:"Empezar", pl2e:"Recomendado",
+  msg:(n,c,p)=>`Hola, he hecho el análisis de "${n}" (${c}) y quiero contratar: ${p}.`,
+  footer:"visibilidad de negocios locales en la IA. Todo se consulta en vivo y no se guarda en ningún servidor.",
+  dlgT:"Ajustes", dlgP:"Necesitas una clave de Google AI Studio (gratis, 5.000 consultas al mes). Se guarda solo en este navegador.",
+  dlgKey:"Clave de API de Google Gemini", dlgGet:"Consíguela en", dlgModel:"Modelo", dlgAuto:"(detectar automáticamente)",
+  dlgSave:"Guardar", dlgClose:"Cerrar", dlgDetect:"Detectar modelos",
+  errKey:"La clave no es válida o el modelo no admite búsqueda. Abre Ajustes → Detectar modelos.",
+  needKey:"Configura primero tu clave gratuita de Google AI Studio.",
+  lang:"español", pago:"de pago"
+}};
+const t = k => T[CFG.lang][k];
 
-/* ► CONTACTO: pon aquí tu WhatsApp (con prefijo, sin +) y tu correo. */
-const CONTACTO = { whatsapp:'34600000000', email:'hola@citame.es' };
-
-function contratar(plan, neg){
-  const txt = `Hola, he hecho el análisis de "${neg.nombre}" (${neg.ciudad}) y quiero contratar: ${plan}.`;
-  const url = CONTACTO.whatsapp && !/^3460000/.test(CONTACTO.whatsapp)
-    ? `https://wa.me/${CONTACTO.whatsapp}?text=${encodeURIComponent(txt)}`
-    : `mailto:${CONTACTO.email}?subject=${encodeURIComponent('Cítame · '+plan)}&body=${encodeURIComponent(txt)}`;
-  window.open(url, '_blank', 'noopener');
-}
-
-/* ---------- utilidades ---------- */
+/* ─────────── utilidades ─────────── */
 const norm = s => (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
-  .replace(/\b(s\.?l\.?u?|s\.?a\.?|c\.?b\.?|sociedad limitada)\b/g,'')
+  .replace(/\b(s\.?l\.?u?|s\.?a\.?|inc|llc|corp|co|ltd)\b/g,'')
   .replace(/[^a-z0-9ñ ]/g,' ').replace(/\s+/g,' ').trim();
-const STOP = new Set(['de','la','el','los','las','del','y','en','centro','clinica','tienda','taller','bar','restaurante','grupo','servicios','the']);
+const STOP = new Set(['de','la','el','los','las','del','y','en','the','and','of','for','centro','clinica','clinic','center','shop','store','bar','grill','group','services','llc','inc']);
 const tokens = s => norm(s).split(' ').filter(w => w.length>2 && !STOP.has(w));
-
-/* ¿el texto menciona al negocio? tolerante a variaciones del nombre */
 function mencionado(texto, nombre){
-  const t = norm(texto), tk = tokens(nombre);
+  const x = norm(texto), tk = tokens(nombre);
   if(!tk.length) return false;
-  if(t.includes(norm(nombre))) return true;
-  const hits = tk.filter(w => t.includes(w)).length;
+  if(x.includes(norm(nombre))) return true;
+  const hits = tk.filter(w => x.includes(w)).length;
   return tk.length===1 ? hits===1 : hits >= Math.max(2, Math.ceil(tk.length*0.7));
 }
 const esc = s => (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function log(m){ const l=$('#pLog'); l.textContent += m+'\n'; l.scrollTop = l.scrollHeight; }
+const progreso = (a,b) => $('#pBar').style.width = Math.round(a/b*100)+'%';
+function fallo(m){ const e=$('#err'); e.innerHTML = m; e.style.display='block'; }
 
-function log(msg){ const l=$('#pLog'); l.textContent += msg+'\n'; l.scrollTop = l.scrollHeight; }
-function progreso(hecho,total){ $('#pBar').style.width = Math.round(hecho/total*100)+'%'; }
-function fallo(msg){ const e=$('#err'); e.textContent = msg; e.style.display='block'; }
-
-/* ---------- capa Gemini ---------- */
-async function gemini(prompt, {buscar=false, json=false} = {}){
+/* ─────────── llamada a la IA (backend o clave local) ─────────── */
+async function ia(prompt, {buscar=false, json=false} = {}){
+  if(BACKEND){
+    const r = await fetch(BACKEND.replace(/\/$/,'') + '/ask', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ prompt, buscar, json })
+    });
+    const d = await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(d.error || `backend ${r.status}`);
+    return { texto:d.texto||'', fuentes:d.fuentes||[] };
+  }
   const model = CFG.model || 'gemini-2.5-flash';
   const body = { contents:[{ role:'user', parts:[{text:prompt}] }] };
-  if(buscar) body.tools = [{ google_search:{} }];            // grounding: la IA busca de verdad
+  if(buscar) body.tools = [{ google_search:{} }];
   else if(json) body.generationConfig = { responseMimeType:'application/json', temperature:0 };
   const r = await fetch(`${API}/models/${model}:generateContent?key=${encodeURIComponent(CFG.key)}`,{
-    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
-  });
-  if(!r.ok){
-    const t = await r.text().catch(()=> '');
-    throw new Error(`API ${r.status}: ${t.slice(0,180)}`);
-  }
-  const d = await r.json();
-  const cand = d.candidates && d.candidates[0];
-  const texto = (cand?.content?.parts || []).map(p=>p.text).filter(Boolean).join('\n').trim();
-  const fuentes = (cand?.groundingMetadata?.groundingChunks || [])
-      .map(c => c.web && (c.web.domain || c.web.title)).filter(Boolean);
-  return { texto, fuentes };
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  if(!r.ok) throw new Error(`API ${r.status}: ${(await r.text().catch(()=>'')).slice(0,180)}`);
+  const d = await r.json(), c = d.candidates && d.candidates[0];
+  return {
+    texto:(c?.content?.parts||[]).map(p=>p.text).filter(Boolean).join('\n').trim(),
+    fuentes:(c?.groundingMetadata?.groundingChunks||[]).map(g=>g.web&&(g.web.domain||g.web.title)).filter(Boolean)
+  };
 }
-
 function parseJSON(txt){
   if(!txt) return null;
-  const limpio = txt.replace(/^```(?:json)?/i,'').replace(/```$/,'').trim();
-  try { return JSON.parse(limpio); } catch(_){}
-  const m = limpio.match(/[\[{][\s\S]*[\]}]/);
-  if(m){ try { return JSON.parse(m[0]); } catch(_){} }
+  const s = txt.replace(/^```(?:json)?/i,'').replace(/```$/,'').trim();
+  try{ return JSON.parse(s); }catch(_){}
+  const m = s.match(/[\[{][\s\S]*[\]}]/);
+  if(m){ try{ return JSON.parse(m[0]); }catch(_){} }
   return null;
 }
-
-/* modelos disponibles en la cuenta → evita depender de un nombre concreto */
 async function detectarModelos(){
   const r = await fetch(`${API}/models?key=${encodeURIComponent(CFG.key)}&pageSize=200`);
-  if(!r.ok) throw new Error('No se pudo listar modelos ('+r.status+')');
+  if(!r.ok) throw new Error('Cannot list models ('+r.status+')');
   const d = await r.json();
-  const ok = (d.models||[])
-    .filter(m => (m.supportedGenerationMethods||[]).includes('generateContent'))
-    .map(m => m.name.replace('models/',''))
-    .filter(n => !/embedding|aqa|image|tts|vision|live|native-audio/i.test(n));
+  const ok = (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent'))
+    .map(m=>m.name.replace('models/','')).filter(n=>!/embedding|aqa|image|tts|vision|live|native-audio/i.test(n));
   const pref = n => (/flash/.test(n)?0:1) + (/lite/.test(n)?.5:0) + (/preview|exp/.test(n)?2:0);
-  ok.sort((a,b)=> pref(a)-pref(b) || b.localeCompare(a));
-  return ok;
+  return ok.sort((a,b)=>pref(a)-pref(b) || b.localeCompare(a));
 }
 
-/* ---------- el análisis ---------- */
+/* ─────────── análisis ─────────── */
+const IDIOMA = () => CFG.lang==='es' ? 'Spanish' : 'English';
+
 async function generarPreguntas(neg, n){
-  const p = `Eres un consumidor de ${neg.ciudad} (España) que busca "${neg.actividad}".
-Escribe ${n} preguntas REALES y variadas que le escribirías a ChatGPT para encontrar ese servicio.
-Mezcla: recomendación general, "el mejor", urgencia, precio/barato, mejor valorado, cercanía, una especialidad concreta y una comparativa.
-NUNCA menciones marcas ni nombres de empresa. Cada pregunta debe incluir la ciudad.
-Devuelve SOLO un array JSON de ${n} strings.`;
-  const { texto } = await gemini(p, {json:true});
+  const p = `You are a customer in ${neg.ciudad} (United States) looking for "${neg.actividad}".
+Write ${n} realistic, varied questions you would type into ChatGPT to find that service.
+Mix: general recommendation, "best", urgent/emergency, price, best reviewed, near me, one specific specialty, one comparison.
+NEVER mention any brand or company name. Every question must include the city.
+Write them in ${IDIOMA()}. Return ONLY a JSON array of ${n} strings.`;
+  const { texto } = await ia(p, {json:true});
   const arr = parseJSON(texto);
   if(Array.isArray(arr) && arr.length) return arr.slice(0,n).map(String);
-  return [`mejores ${neg.actividad} en ${neg.ciudad}`,
-          `¿qué ${neg.actividad} me recomiendas en ${neg.ciudad}?`,
-          `${neg.actividad} en ${neg.ciudad} buenos y baratos`,
-          `${neg.actividad} de urgencia en ${neg.ciudad}`].slice(0,n);
+  const base = CFG.lang==='es'
+    ? [`mejores ${neg.actividad} en ${neg.ciudad}`, `¿qué ${neg.actividad} me recomiendas en ${neg.ciudad}?`,
+       `${neg.actividad} baratos en ${neg.ciudad}`, `${neg.actividad} de urgencia en ${neg.ciudad}`]
+    : [`best ${neg.actividad} in ${neg.ciudad}`, `which ${neg.actividad} do you recommend in ${neg.ciudad}?`,
+       `affordable ${neg.actividad} in ${neg.ciudad}`, `emergency ${neg.actividad} in ${neg.ciudad}`];
+  return base.slice(0,n);
 }
 
 async function extraerNegocios(respuesta, neg){
-  const p = `De este texto, extrae SOLO los nombres propios de negocios/empresas concretos que se recomiendan, en el orden en que aparecen (ignora categorías genéricas, portales, directorios y webs).
-Texto:
+  const p = `From this text, extract ONLY the specific business names being recommended, in the order they appear (ignore generic categories, directories and websites).
+Text:
 """${respuesta.slice(0,6000)}"""
-Devuelve JSON: {"negocios":["..."],"objetivo":true|false,"posicion":n|null} donde "objetivo" indica si "${neg.nombre}" está entre ellos y "posicion" su puesto (1 = primero).`;
-  const { texto } = await gemini(p, {json:true});
+Return JSON: {"negocios":["..."],"objetivo":true|false,"posicion":n|null} where "objetivo" says whether "${neg.nombre}" is among them and "posicion" is its rank (1 = first).`;
+  const { texto } = await ia(p, {json:true});
   const j = parseJSON(texto) || {};
   const lista = Array.isArray(j.negocios) ? j.negocios.map(String) : [];
   let objetivo = !!j.objetivo, pos = Number(j.posicion)||null;
-  const idx = lista.findIndex(x => mencionado(x, neg.nombre));
-  if(idx >= 0){ objetivo = true; pos = idx+1; }
+  const i = lista.findIndex(x => mencionado(x, neg.nombre));
+  if(i>=0){ objetivo = true; pos = i+1; }
   else if(!objetivo && mencionado(respuesta, neg.nombre)){ objetivo = true; pos = pos || lista.length+1; }
   return { lista, objetivo, pos };
 }
@@ -351,64 +437,51 @@ const PUNTOS = p => p===1?100 : p===2?80 : p===3?65 : p<=5?50 : 35;
 async function analizar(neg, nPreg){
   $('#form').style.display='none'; $('#progress').style.display='block';
   $('#pLog').textContent=''; progreso(0,1);
-  $('#pTitle').textContent = `Analizando "${neg.nombre}" en ${neg.ciudad}…`;
-
-  log('▸ Generando las preguntas que haría un cliente real…');
+  $('#pTitle').textContent = `${t('analizando')} "${neg.nombre}" · ${neg.ciudad}…`;
+  log(t('gen'));
   const preguntas = await generarPreguntas(neg, nPreg);
-  log(`  ${preguntas.length} preguntas listas.\n`);
+  log(`  ${preguntas.length} ${t('listas')}\n`);
 
-  const filas = [], competidores = new Map(), fuentes = new Map();
-  let hechas = 0;
-
+  const filas=[], comp=new Map(), fuentes=new Map();
+  let hechas=0;
   for(const q of preguntas){
     try{
-      const { texto, fuentes:fs } = await gemini(
-        `${q}\n\n(Responde como asistente a un usuario real: recomienda negocios CONCRETOS con su nombre, los que de verdad encuentres para esa ciudad.)`,
+      const { texto, fuentes:fs } = await ia(
+        `${q}\n\n(Answer like a real assistant helping a user: recommend SPECIFIC businesses by name, the ones you actually find for that city. Reply in ${IDIOMA()}.)`,
         {buscar:true});
       const { lista, objetivo, pos } = await extraerNegocios(texto, neg);
       filas.push({ q, objetivo, pos, lista });
-      lista.forEach((n,i) => {
+      lista.forEach((n,i)=>{
         if(mencionado(n, neg.nombre)) return;
-        const k = n.trim().replace(/\s+/g,' ');
-        const prev = competidores.get(k) || {n:k, veces:0, puntos:0};
-        prev.veces++; prev.puntos += PUNTOS(i+1); competidores.set(k, prev);
+        const k=n.trim().replace(/\s+/g,' ');
+        const p=comp.get(k)||{n:k,veces:0,puntos:0}; p.veces++; p.puntos+=PUNTOS(i+1); comp.set(k,p);
       });
-      fs.forEach(f => {
-        const d = String(f).replace(/^www\./,'').toLowerCase();
-        fuentes.set(d, (fuentes.get(d)||0)+1);
-      });
-      log(`${objetivo ? '✅ TE CITA' : '❌ no te cita'} · ${q.slice(0,70)}`);
-    }catch(e){
-      log(`⚠️  error en "${q.slice(0,40)}…": ${e.message}`);
-    }
+      fs.forEach(f => { const d=String(f).replace(/^www\./,'').toLowerCase(); fuentes.set(d,(fuentes.get(d)||0)+1); });
+      log(`${objetivo?t('cita'):t('nocita')} · ${q.slice(0,68)}`);
+    }catch(e){ log(`⚠️  ${t('errq')} "${q.slice(0,38)}…": ${e.message}`); }
     progreso(++hechas, preguntas.length);
   }
-  if(!filas.length) throw new Error('No se pudo completar ninguna consulta. Revisa la clave de API en Ajustes.');
+  if(!filas.length) throw new Error(t('sinDatos'));
 
-  const citas = filas.filter(f=>f.objetivo);
-  const score = Math.round(filas.reduce((a,f)=> a + (f.objetivo ? PUNTOS(f.pos||6) : 0), 0) / filas.length);
-  const rivales = [...competidores.values()].sort((a,b)=> b.puntos-a.puntos || b.veces-a.veces).slice(0,8);
-  const srcs = [...fuentes.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10);
-
+  const citas = filas.filter(f=>f.objetivo).length;
+  const score = Math.round(filas.reduce((a,f)=>a+(f.objetivo?PUNTOS(f.pos||6):0),0)/filas.length);
   $('#progress').style.display='none';
-  pintar({ neg, filas, score, citas:citas.length, rivales, srcs });
+  pintar({ neg, filas, score, citas,
+    rivales:[...comp.values()].sort((a,b)=>b.puntos-a.puntos||b.veces-a.veces).slice(0,8),
+    srcs:[...fuentes.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10) });
 }
 
-/* ---------- informe ---------- */
+/* ─────────── informe ─────────── */
+let ULTIMO = null;
 function pintar(d){
+  ULTIMO = d;
   const { neg, filas, score, citas, rivales, srcs } = d;
-  const pct = Math.max(0, Math.min(100, score));
-  const C = 2*Math.PI*64, color = pct<25?'var(--bad)':pct<60?'var(--warn)':'var(--ok)';
-  const tag = pct<25 ? ['t-bad','INVISIBLE PARA LA IA'] : pct<60 ? ['t-warn','VISIBILIDAD DÉBIL'] : ['t-ok','BIEN POSICIONADO'];
-  const titular = pct<25
-    ? `La IA no recomienda tu negocio`
-    : pct<60 ? `Apareces, pero por detrás de tus competidores` : `Tu negocio ya se lleva recomendaciones`;
-  const bajada = pct<25
-    ? `De ${filas.length} preguntas que haría un cliente de ${neg.ciudad}, la IA te ha nombrado en ${citas}. Los clientes que preguntan por "${neg.actividad}" están siendo enviados a otros negocios.`
-    : pct<60 ? `Te menciona en ${citas} de ${filas.length} preguntas, pero casi nunca en primer lugar. La primera recomendación se lleva la mayor parte de las visitas.`
-    : `Te menciona en ${citas} de ${filas.length} preguntas y en buenas posiciones. Toca defender la posición: esto se mueve cada mes.`;
-
-  const plan = construirPlan(d);
+  const pct = Math.max(0,Math.min(100,score)), C = 2*Math.PI*64;
+  const color = pct<25?'var(--bad)':pct<60?'var(--warn)':'var(--ok)';
+  const tg = pct<25?['t-bad',t('tagBad')]:pct<60?['t-warn',t('tagWarn')]:['t-ok',t('tagOk')];
+  const tit = pct<25?t('titBad'):pct<60?t('titWarn'):t('titOk');
+  const baj = pct<25 ? t('subBad')(filas.length,citas,neg.actividad,neg.ciudad)
+            : pct<60 ? t('subWarn')(filas.length,citas) : t('subOk')(filas.length,citas);
 
   $('#result').innerHTML = `
   <div class="card">
@@ -417,164 +490,165 @@ function pintar(d){
         <svg width="150" height="150" viewBox="0 0 150 150">
           <circle cx="75" cy="75" r="64" fill="none" stroke="var(--line)" stroke-width="13"/>
           <circle cx="75" cy="75" r="64" fill="none" stroke="${color}" stroke-width="13" stroke-linecap="round"
-                  stroke-dasharray="${C}" stroke-dashoffset="${C - C*pct/100}"/>
+                  stroke-dasharray="${C}" stroke-dashoffset="${C-C*pct/100}"/>
         </svg>
-        <div class="val"><b>${pct}</b><span>de 100</span></div>
+        <div class="val"><b>${pct}</b><span>/ 100</span></div>
       </div>
       <div class="verdict">
-        <span class="tag ${tag[0]}">${tag[1]}</span>
-        <h2>${esc(titular)}</h2>
-        <p>${esc(bajada)}</p>
+        <span class="tag ${tg[0]}">${tg[1]}</span>
+        <h2>${esc(tit)}</h2><p>${esc(baj)}</p>
       </div>
     </div>
 
-    <section class="block">
-      <h3>Qué contesta la IA, pregunta por pregunta</h3>
-      <table><thead><tr><th>Pregunta del cliente</th><th style="width:110px">¿Sales tú?</th><th style="width:36%">A quién recomienda</th></tr></thead><tbody>
-      ${filas.map(f=>`<tr>
-        <td class="q">${esc(f.q)}</td>
-        <td>${f.objetivo ? `<span class="pill p-si">Sí · nº ${f.pos||'?'}</span>` : `<span class="pill p-no">No apareces</span>`}</td>
-        <td class="who">${esc(f.lista.slice(0,3).join(' · ')) || '—'}</td></tr>`).join('')}
-      </tbody></table>
-    </section>
+    <section class="block"><h3>${t('s1')}</h3><div class="tw">
+      <table><thead><tr><th>${t('th1')}</th><th style="width:112px">${t('th2')}</th><th style="width:34%">${t('th3')}</th></tr></thead><tbody>
+      ${filas.map(f=>`<tr><td class="q">${esc(f.q)}</td>
+        <td>${f.objetivo?`<span class="pill p-si">${t('pSi')}${f.pos||'?'}</span>`:`<span class="pill p-no">${t('pNo')}</span>`}</td>
+        <td class="who">${esc(f.lista.slice(0,3).join(' · '))||'—'}</td></tr>`).join('')}
+      </tbody></table></div></section>
 
-    ${rivales.length ? `<section class="block">
-      <h3>Quién se está quedando tus clientes</h3>
+    ${rivales.length?`<section class="block"><h3>${t('s2')}</h3>
       ${rivales.map((r,i)=>`<div class="rank"><span class="n">${i+1}</span><span class="nm">${esc(r.n)}</span>
-        <span class="ct">${r.veces} de ${filas.length} preguntas</span></div>`).join('')}
-    </section>`:''}
+      <span class="ct">${r.veces} ${t('of')} ${filas.length} ${t('questions')}</span></div>`).join('')}</section>`:''}
 
-    ${srcs.length ? `<section class="block">
-      <h3>Las fuentes que la IA lee para recomendar en tu sector <span style="text-transform:none;letter-spacing:0;font-weight:500">— aquí es donde tienes que estar</span></h3>
-      <div class="srcs">${srcs.map(([dom,n])=>`<span class="src">${esc(dom)} <b>×${n}</b></span>`).join('')}</div>
-    </section>`:''}
+    ${srcs.length?`<section class="block"><h3>${t('s3')} <span style="text-transform:none;letter-spacing:0;font-weight:500">${t('s3b')}</span></h3>
+      <div class="srcs">${srcs.map(([d,n])=>`<span class="src">${esc(d)} <b>×${n}</b></span>`).join('')}</div></section>`:''}
 
-    <section class="block">
-      <h3>Tu plan de acción</h3>
-      <ol class="plan">${plan.map(p=>`<li><b>${esc(p.t)}</b><span>${esc(p.d)}</span></li>`).join('')}</ol>
-    </section>
+    <section class="block"><h3>${t('s4')}</h3>
+      <ol class="plan">${construirPlan(d).map(p=>`<li><b>${esc(p.t)}</b><span>${esc(p.d)}</span></li>`).join('')}</ol></section>
   </div>
 
   <div class="cta noprint">
-    <h3>Esto cambia cada mes</h3>
-    <p>Las respuestas de la IA se reescriben constantemente: hoy no sales, mañana puedes salir el primero — o al revés. La vigilancia mensual te avisa cuando entras, cuando caes y qué competidor te ha adelantado.</p>
-    <button class="btn" onclick="window.print()">Descargar este informe en PDF</button>
-    <button class="btn btn-ghost" onclick="location.reload()">Analizar otro negocio</button>
+    <h3>${t('ctaT')}</h3><p>${t('ctaP')}</p>
+    <button class="btn" onclick="window.print()">${t('bPdf')}</button>
+    <button class="btn btn-ghost" onclick="location.reload()">${t('bOtro')}</button>
   </div>
 
   <div class="planes noprint">
     <div class="plan-c">
-      <h4>Informe completo</h4>
-      <div class="precio">49 €<small> pago único</small></div>
-      <ul>
-        <li>15 preguntas reales de cliente</li>
-        <li>Comparativa con tus competidores</li>
-        <li>Las fuentes que lee la IA en tu sector</li>
-        <li>Plan de acción por escrito</li>
-      </ul>
-      <button class="btn btn-ghost" data-plan="Informe completo (49 €)">Lo quiero</button>
+      <h4>${t('pl1')}</h4><div class="precio">${PRECIOS.informe}<small> ${t('pl1s')}</small></div>
+      <ul>${t('pl1i').map(x=>`<li>${x}</li>`).join('')}</ul>
+      <button class="btn btn-ghost" data-plan="${t('pl1')} (${PRECIOS.informe})">${t('pl1b')}</button>
     </div>
     <div class="plan-c destacado">
-      <span class="et">Recomendado</span>
-      <h4>Vigilancia mensual</h4>
-      <div class="precio">29 €<small> /mes</small></div>
-      <ul>
-        <li>Todo lo del informe, cada mes</li>
-        <li>Aviso cuando entras o desapareces</li>
-        <li>Aviso si un competidor te adelanta</li>
-        <li>Sin permanencia</li>
-      </ul>
-      <button class="btn btn-primary" data-plan="Vigilancia mensual (29 €/mes)">Empezar</button>
+      <span class="et">${t('pl2e')}</span>
+      <h4>${t('pl2')}</h4><div class="precio">${PRECIOS.vigilancia}<small>${t('pl2s')}</small></div>
+      <ul>${t('pl2i').map(x=>`<li>${x}</li>`).join('')}</ul>
+      <button class="btn btn-primary" data-plan="${t('pl2')} (${PRECIOS.vigilancia}${t('pl2s')})">${t('pl2b')}</button>
     </div>
   </div>`;
-  $('#result').querySelectorAll('[data-plan]').forEach(b => b.onclick = () => contratar(b.dataset.plan, neg));
+  $('#result').querySelectorAll('[data-plan]').forEach(b => b.onclick = ()=>contratar(b.dataset.plan, neg));
   $('#result').style.display='block';
   $('#result').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function construirPlan(d){
-  const { neg, score, srcs, filas, rivales } = d;
-  const p = [];
-  if(score < 60){
-    p.push({t:'Consigue que exista una página tuya que la IA pueda citar',
-      d:`La IA solo recomienda lo que puede leer y verificar. Necesitas una página propia con el nombre exacto "${neg.nombre}", dirección, teléfono, horario y una lista clara de servicios de ${neg.actividad} en ${neg.ciudad} — escrita en frases que respondan a las preguntas de arriba.`});
-  }
-  if(srcs.length){
-    p.push({t:`Entra en las fuentes que la IA consulta (${srcs.slice(0,3).map(s=>s[0]).join(', ')})`,
-      d:'Estas son las webs de las que la IA saca sus recomendaciones en tu sector y tu ciudad. Estar dado de alta y con la ficha completa en ellas es la palanca más rápida: no dependes de posicionar tu web, sino de aparecer donde ella ya lee.'});
-  }
-  p.push({t:'Datos idénticos en todas partes (nombre, dirección, teléfono)',
-    d:'Cualquier variación entre Google, tu web y los directorios rompe la identificación del negocio y la IA descarta la ficha por dudosa. Un solo formato, copiado y pegado en todos los sitios.'});
-  const preg = filas.filter(f=>!f.objetivo).slice(0,2).map(f=>`"${f.q}"`).join(' y ');
-  if(preg) p.push({t:'Responde con tus propias palabras a las preguntas que hoy fallas',
-    d:`Publica una sección de preguntas frecuentes que conteste literalmente ${preg}. Los modelos citan textos que ya vienen en formato de respuesta.`});
-  if(rivales.length) p.push({t:`Estudia por qué sale ${rivales[0].n}`,
-    d:'Mira dónde está publicado, qué reseñas tiene y qué información da que tú no das. No hace falta adivinar: la IA ya te ha dicho a quién prefiere.'});
-  p.push({t:'Vuelve a medir dentro de 30 días',
-    d:'Sin medición no sabes si lo que has hecho ha funcionado. El indicador que importa es en cuántas preguntas te nombra y en qué puesto.'});
+  const { neg, score, srcs, filas, rivales } = d, p = [];
+  if(score < 60) p.push({t:t('p1t'), d:t('p1d')(neg.nombre, neg.actividad, neg.ciudad)});
+  if(srcs.length) p.push({t:t('p2t')(srcs.slice(0,3).map(s=>s[0]).join(', ')), d:t('p2d')});
+  p.push({t:t('p3t'), d:t('p3d')});
+  const fall = filas.filter(f=>!f.objetivo).slice(0,2).map(f=>`"${f.q}"`).join(' + ');
+  if(fall) p.push({t:t('p4t'), d:t('p4d')(fall)});
+  if(rivales.length) p.push({t:t('p5t')(rivales[0].n), d:t('p5d')});
+  p.push({t:t('p6t'), d:t('p6d')});
   return p;
 }
 
-/* ---------- demo sin clave ---------- */
-function demo(){
-  const neg = {nombre:'Clínica Dental Sonrisa', ciudad:'Murcia', actividad:'clínica dental / implantes'};
-  const F = (q,o,p,l)=>({q,objetivo:o,pos:p,lista:l});
-  pintar({ neg, score:18, citas:2,
-    filas:[
-      F('¿Cuál es la mejor clínica dental en Murcia?',false,null,['Dental Corporación Vega','Clínica Ortiz','Instituto Dental Segura']),
-      F('clínicas dentales baratas en Murcia con financiación',false,null,['Vitaldent Murcia','Dental Vega']),
-      F('¿dónde ponerme implantes dentales en Murcia?',true,4,['Instituto Dental Segura','Clínica Ortiz','Dental Vega','Clínica Dental Sonrisa']),
-      F('dentista de urgencias en Murcia hoy',false,null,['Clínica Ortiz','Urgencias Dentales Murcia']),
-      F('clínica dental mejor valorada de Murcia centro',false,null,['Instituto Dental Segura','Clínica Ortiz']),
-      F('ortodoncia invisible en Murcia, ¿qué clínica recomiendas?',true,5,['Ortodoncia Murcia','Dental Vega','Clínica Ortiz','Invisalign Center','Clínica Dental Sonrisa'])],
-    rivales:[{n:'Clínica Ortiz',veces:4,puntos:0},{n:'Instituto Dental Segura',veces:3,puntos:0},
-             {n:'Dental Vega',veces:3,puntos:0},{n:'Vitaldent Murcia',veces:1,puntos:0}],
-    srcs:[['doctoralia.es',5],['google.com',4],['paginasamarillas.es',3],['topdoctors.es',2],['dentistasmurcia.org',2],['facebook.com',1]] });
+function contratar(plan, neg){
+  const txt = t('msg')(neg.nombre, neg.ciudad, plan);
+  const url = CONTACTO.whatsapp
+    ? `https://wa.me/${CONTACTO.whatsapp}?text=${encodeURIComponent(txt)}`
+    : `mailto:${CONTACTO.email}?subject=${encodeURIComponent('CiteMe · '+plan)}&body=${encodeURIComponent(txt)}`;
+  window.open(url, '_blank', 'noopener');
 }
 
-/* ---------- eventos ---------- */
-function pintarHint(){
-  $('#hintKey').innerHTML = CFG.key
-    ? `Clave configurada · modelo <code>${esc(CFG.model||'auto')}</code>`
-    : `Sin clave todavía → pulsa <b>Ajustes</b> (es gratis)`;
+/* ─────────── ejemplo ─────────── */
+function demo(){
+  const es = CFG.lang==='es';
+  const neg = { nombre:'Sunrise Dental Care', ciudad:'Miami, FL', actividad: es?'clínica dental / implantes':'dental clinic / implants' };
+  const F=(q,o,p,l)=>({q,objetivo:o,pos:p,lista:l});
+  const qs = es
+   ? ['¿Cuál es la mejor clínica dental en Miami?','clínicas dentales baratas en Miami con financiación',
+      '¿dónde ponerme implantes dentales en Miami?','dentista de urgencias en Miami hoy',
+      'clínica dental mejor valorada de Miami Beach','ortodoncia invisible en Miami, ¿qué clínica recomiendas?']
+   : ['What is the best dental clinic in Miami?','affordable dental clinics in Miami with financing',
+      'where can I get dental implants in Miami?','emergency dentist in Miami today',
+      'best reviewed dental office in Miami Beach','Invisalign in Miami — which clinic do you recommend?'];
+  pintar({ neg, score:18, citas:2,
+    filas:[F(qs[0],false,null,['Coral Gables Dental Group','Biscayne Smile Studio','Miami Dental Arts']),
+           F(qs[1],false,null,['Aspen Dental Miami','Biscayne Smile Studio']),
+           F(qs[2],true,4,['Miami Dental Arts','Coral Gables Dental Group','Biscayne Smile Studio','Sunrise Dental Care']),
+           F(qs[3],false,null,['Coral Gables Dental Group','Miami Emergency Dental']),
+           F(qs[4],false,null,['Biscayne Smile Studio','Coral Gables Dental Group']),
+           F(qs[5],true,5,['Miami Orthodontics','Biscayne Smile Studio','Coral Gables Dental Group','Invisalign Center Miami','Sunrise Dental Care'])],
+    rivales:[{n:'Coral Gables Dental Group',veces:4},{n:'Biscayne Smile Studio',veces:4},
+             {n:'Miami Dental Arts',veces:2},{n:'Aspen Dental Miami',veces:1}],
+    srcs:[['yelp.com',5],['google.com',4],['healthgrades.com',3],['nextdoor.com',2],['bbb.org',2],['miamidentalguide.com',1]] });
 }
+
+/* ─────────── idioma e interfaz ─────────── */
+function aplicarIdioma(){
+  document.documentElement.lang = CFG.lang;
+  document.querySelectorAll('[data-t]').forEach(el => el.innerHTML = t(el.dataset.t));
+  $('#h1').innerHTML = t('h1');
+  $('#fNombre').placeholder = t('phNombre');
+  $('#fCiudad').placeholder = t('phCiudad');
+  $('#fActividad').placeholder = t('phActividad');
+  const sel = $('#fPreguntas'), v = sel.value || '10';
+  const libre = !BACKEND || CFG.key;
+  sel.innerHTML = t('opt').map((o,i)=>{
+    const val = [4,10,15][i];
+    const bloq = !libre && val>4;
+    return `<option value="${val}"${bloq?' disabled':''}>${o}${bloq?' — '+t('pago'):''}</option>`;
+  }).join('');
+  sel.value = libre ? v : '4';
+  $('#cModel').options[0].textContent = t('dlgAuto');
+  document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('on', b.dataset.lang===CFG.lang));
+  pintarHint();
+  if(ULTIMO) pintar(ULTIMO);
+}
+function pintarHint(){
+  $('#hintKey').innerHTML = BACKEND && !CFG.key ? t('backendOn')
+    : CFG.key ? `${t('keyOk')} <code>${esc(CFG.model||'auto')}</code>` : t('keyNo');
+}
+document.querySelectorAll('.lang button').forEach(b => b.onclick = ()=>{
+  CFG.lang = b.dataset.lang; localStorage.setItem(LS.lang, CFG.lang); aplicarIdioma();
+});
 $('#btnCfg').onclick = ()=>{ $('#cKey').value = CFG.key; $('#dlg').showModal(); };
 $('#cClose').onclick = ()=> $('#dlg').close();
 $('#cSave').onclick = ()=>{
   CFG.key = $('#cKey').value.trim(); CFG.model = $('#cModel').value;
   localStorage.setItem(LS.key, CFG.key); localStorage.setItem(LS.model, CFG.model);
-  pintarHint(); $('#dlg').close();
+  aplicarIdioma(); $('#dlg').close();
 };
 $('#cList').onclick = async ()=>{
   CFG.key = $('#cKey').value.trim();
-  const sel = $('#cModel');
-  sel.innerHTML = '<option>detectando…</option>';
+  const sel = $('#cModel'); sel.innerHTML = '<option>…</option>';
   try{
     const ms = await detectarModelos();
-    sel.innerHTML = '<option value="">(automático)</option>' + ms.map(m=>`<option value="${m}">${m}</option>`).join('');
-    if(CFG.model && ms.includes(CFG.model)) sel.value = CFG.model;
-    else if(ms.length) sel.value = ms[0];
+    sel.innerHTML = `<option value="">${t('dlgAuto')}</option>` + ms.map(m=>`<option value="${m}">${m}</option>`).join('');
+    sel.value = (CFG.model && ms.includes(CFG.model)) ? CFG.model : (ms[0]||'');
   }catch(e){ sel.innerHTML = `<option value="">${esc(e.message)}</option>`; }
 };
 $('#btnDemo').onclick = demo;
 $('#btnGo').onclick = async ()=>{
   $('#err').style.display='none';
   const neg = { nombre:$('#fNombre').value.trim(), ciudad:$('#fCiudad').value.trim(), actividad:$('#fActividad').value.trim() };
-  if(!neg.nombre || !neg.ciudad || !neg.actividad) return fallo('Rellena nombre, ciudad y actividad.');
-  if(!CFG.key){ $('#dlg').showModal(); return fallo('Configura primero tu clave de Google AI Studio (es gratuita).'); }
+  if(!neg.nombre || !neg.ciudad || !neg.actividad) return fallo(t('faltan'));
+  if(!BACKEND && !CFG.key){ $('#dlg').showModal(); return fallo(t('needKey')); }
   $('#btnGo').disabled = true;
   try{
-    if(!CFG.model){
+    if(!BACKEND && !CFG.model){
       try{ const ms = await detectarModelos(); if(ms.length){ CFG.model = ms[0]; localStorage.setItem(LS.model, CFG.model); } }catch(_){}
     }
     await analizar(neg, parseInt($('#fPreguntas').value,10));
   }catch(e){
     $('#progress').style.display='none'; $('#form').style.display='block';
-    fallo(e.message.includes('API 400') ? 'La clave no es válida o el modelo no admite búsqueda. Abre Ajustes → Detectar modelos.' : e.message);
+    fallo(/API 400/.test(e.message) ? t('errKey') : esc(e.message));
   }finally{ $('#btnGo').disabled = false; }
 };
-pintarHint();
-if(location.hash === '#ejemplo' || location.hash === '#demo') demo();   // enlace compartible con informe de muestra
+aplicarIdioma();
+if(location.hash==='#sample' || location.hash==='#ejemplo' || location.hash==='#demo') demo();
 </script>
 </body>
 </html>
