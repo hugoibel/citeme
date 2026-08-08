@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cítame · ¿Te recomienda la IA a tus clientes?</title>
+<meta name="description" content="Descubre gratis si ChatGPT, Gemini y Perplexity recomiendan tu negocio cuando un cliente pregunta por tu sector en tu ciudad. Informe con las fuentes reales que lee la IA.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#0f1729; --ink-soft:#5a6478; --line:#e4e7ee;
+  --brand:#1b5cff; --brand-soft:#eaf0ff; --ok:#0a9d63; --ok-soft:#e6f6ef;
+  --warn:#c98200; --warn-soft:#fdf3e0; --bad:#d5304a; --bad-soft:#fdecef;
+  --radius:16px; --shadow:0 1px 2px rgba(16,24,40,.05),0 12px 32px -12px rgba(16,24,40,.14);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0b0f17;--panel:#131a26;--ink:#eef2f8;--ink-soft:#99a4b8;--line:#243044;
+  --brand:#5b8cff;--brand-soft:#16233f;--ok:#3ad294;--ok-soft:#0f2a20;--warn:#f0b445;--warn-soft:#2b2213;
+  --bad:#ff6b83;--bad-soft:#2d1620;--shadow:0 1px 2px rgba(0,0,0,.4),0 16px 40px -16px rgba(0,0,0,.7);}
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+a{color:var(--brand)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.top{padding:22px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;font-size:19px}
+.logo .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(140deg,var(--brand),#8a5bff);display:grid;place-items:center;color:#fff;font-size:15px}
+.btn{
+  border:1px solid transparent;border-radius:12px;padding:12px 18px;font-weight:650;font-size:15px;
+  cursor:pointer;font-family:inherit;transition:.15s transform,.15s box-shadow,.15s background;
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--brand);color:#fff;box-shadow:0 8px 20px -8px rgba(27,92,255,.8)}
+.btn-primary:hover{filter:brightness(1.06)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.btn-ghost{background:transparent;color:var(--ink-soft);border-color:var(--line)}
+.btn-ghost:hover{color:var(--ink);border-color:var(--ink-soft)}
+
+/* HERO */
+.hero{padding:38px 0 10px;max-width:760px}
+.kicker{display:inline-flex;align-items:center;gap:8px;background:var(--brand-soft);color:var(--brand);
+  font-weight:650;font-size:13px;padding:6px 12px;border-radius:999px;margin-bottom:18px}
+h1{font-size:clamp(30px,5.2vw,50px);line-height:1.06;letter-spacing:-.035em;margin:0 0 16px;font-weight:800}
+h1 em{font-style:normal;background:linear-gradient(180deg,transparent 62%,rgba(27,92,255,.22) 62%);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .06em}
+.sub{font-size:clamp(16px,2.2vw,19px);color:var(--ink-soft);margin:0 0 8px;max-width:62ch}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 6px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.stat b{font-size:19px;letter-spacing:-.02em}
+.stat span{display:block;font-size:12.5px;color:var(--ink-soft)}
+
+/* CARD / FORM */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+.form{margin:26px 0 40px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+label{display:block;font-size:13px;font-weight:650;color:var(--ink-soft);margin:0 0 6px}
+input,select,textarea{
+  width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:var(--bg);
+  color:var(--ink);font:inherit;font-size:15px;outline:0;transition:.15s border-color,.15s box-shadow
+}
+input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.row-actions{display:flex;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.hint{font-size:13px;color:var(--ink-soft)}
+.hint code{font-family:var(--mono);font-size:12px;background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:5px}
+
+/* PROGRESO */
+#progress{display:none;margin:0 0 40px}
+.bar{height:8px;background:var(--bg);border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:14px 0 10px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),#8a5bff);transition:width .4s}
+.log{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);max-height:150px;overflow:auto;white-space:pre-wrap}
+
+/* RESULTADO */
+#result{display:none;margin-bottom:60px}
+.score-head{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.gauge{position:relative;width:150px;height:150px;flex:0 0 auto}
+.gauge svg{transform:rotate(-90deg)}
+.gauge .val{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.gauge .val b{font-size:40px;letter-spacing:-.04em;line-height:1}
+.gauge .val span{font-size:12px;color:var(--ink-soft);display:block}
+.verdict{flex:1;min-width:260px}
+.verdict h2{margin:0 0 6px;font-size:24px;letter-spacing:-.025em}
+.verdict p{margin:0;color:var(--ink-soft)}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:10px}
+.t-bad{background:var(--bad-soft);color:var(--bad)} .t-warn{background:var(--warn-soft);color:var(--warn)} .t-ok{background:var(--ok-soft);color:var(--ok)}
+
+section.block{margin-top:26px}
+section.block h3{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-soft);margin:0 0 12px;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);
+   padding:0 10px 8px;border-bottom:1px solid var(--line);font-weight:700}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.p-no{background:var(--bad-soft);color:var(--bad)} .p-si{background:var(--ok-soft);color:var(--ok)}
+.q{font-weight:600}
+.who{color:var(--ink-soft);font-size:13px;margin-top:3px}
+.rank{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.rank:last-child{border-bottom:0}
+.rank .n{width:26px;height:26px;border-radius:8px;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font-size:12.5px;font-weight:700;flex:0 0 auto}
+.rank .nm{flex:1;font-weight:600}
+.rank .ct{font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.rank.me{background:var(--brand-soft);margin:0 -10px;padding:9px 10px;border-radius:10px;border-bottom:0}
+.srcs{display:flex;flex-wrap:wrap;gap:8px}
+.src{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:13px;display:flex;gap:7px;align-items:center}
+.src b{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-weight:600;font-size:12px}
+ol.plan{margin:0;padding:0;list-style:none;counter-reset:p}
+ol.plan li{counter-increment:p;position:relative;padding:0 0 16px 42px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+ol.plan li:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+ol.plan li::before{content:counter(p);position:absolute;left:0;top:-1px;width:28px;height:28px;border-radius:9px;
+  background:var(--brand);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+ol.plan b{display:block;margin-bottom:3px}
+ol.plan span{color:var(--ink-soft);font-size:14.5px}
+
+.cta{margin-top:28px;background:linear-gradient(140deg,var(--brand),#8a5bff);color:#fff;border-radius:var(--radius);padding:26px}
+.cta h3{color:#fff;text-transform:none;letter-spacing:-.02em;font-size:21px;margin:0 0 6px}
+.cta p{margin:0 0 16px;opacity:.9;font-size:15px;max-width:60ch}
+.cta .btn{background:#fff;color:#1b2a4a}
+.cta .btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+.cta .btn-ghost:hover{background:rgba(255,255,255,.12);color:#fff}
+
+.planes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+@media(max-width:640px){.planes{grid-template-columns:1fr}}
+.plan-c{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:relative}
+.plan-c.destacado{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.plan-c .et{position:absolute;top:-11px;right:16px;background:var(--brand);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px}
+.plan-c h4{margin:0 0 2px;font-size:17px;letter-spacing:-.02em}
+.plan-c .precio{font-size:32px;font-weight:800;letter-spacing:-.04em;margin:8px 0 2px}
+.plan-c .precio small{font-size:14px;font-weight:600;color:var(--ink-soft);letter-spacing:0}
+.plan-c ul{margin:12px 0 18px;padding:0;list-style:none;font-size:14.5px;color:var(--ink-soft)}
+.plan-c li{padding:4px 0 4px 22px;position:relative}
+.plan-c li::before{content:'✓';position:absolute;left:0;color:var(--ok);font-weight:800}
+.plan-c .btn{width:100%}
+footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--ink-soft);font-size:13.5px}
+dialog{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);color:var(--ink);
+  padding:24px;max-width:520px;width:calc(100% - 32px);box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(6,10,18,.55);backdrop-filter:blur(3px)}
+dialog h3{margin:0 0 4px;font-size:19px;letter-spacing:-.02em}
+dialog p{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
+.err{background:var(--bad-soft);color:var(--bad);border-radius:11px;padding:12px 14px;font-size:14px;margin-top:14px;display:none}
+@media print{
+  body{background:#fff;color:#000}
+  header.top,.hero,.form,#progress,.cta,footer,.noprint{display:none!important}
+  #result{display:block!important}
+  .card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  section.block{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="logo"><span class="dot"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 20v-7"/><path d="M8.5 9.5a5 5 0 0 1 7 0"/><path d="M5.5 6.2a9.5 9.5 0 0 1 13 0"/><circle cx="12" cy="12.5" r="1.4" fill="#fff" stroke="none"/></svg></span> Cítame</div>
+    <button class="btn btn-ghost" id="btnCfg">Ajustes</button>
+  </header>
+
+  <div class="hero">
+    <span class="kicker">● Análisis en vivo · ChatGPT · Gemini · Perplexity</span>
+    <h1>Tus clientes ya no buscan en Google.<br>Le preguntan a la IA. <em>¿Te recomienda?</em></h1>
+    <p class="sub">Comprobamos en tiempo real qué contesta la inteligencia artificial cuando alguien busca lo que tú vendes, en tu ciudad. Y te decimos exactamente por qué recomienda a otros y no a ti.</p>
+    <div class="stats">
+      <div class="stat"><b>1,2%</b><span>de negocios locales recomendados por ChatGPT</span></div>
+      <div class="stat"><b>45%</b><span>ya usa IA para buscar negocios (era 6%)</span></div>
+      <div class="stat"><b>9×</b><span>más conversión que el tráfico de Google</span></div>
+    </div>
+  </div>
+
+  <div class="card form" id="form">
+    <div class="grid2">
+      <div>
+        <label for="fNombre">Nombre del negocio</label>
+        <input id="fNombre" placeholder="Clínica Dental Sonrisa" autocomplete="off">
+      </div>
+      <div>
+        <label for="fCiudad">Ciudad o zona</label>
+        <input id="fCiudad" placeholder="Murcia" autocomplete="off">
+      </div>
+      <div>
+        <label for="fActividad">¿A qué se dedica?</label>
+        <input id="fActividad" placeholder="clínica dental / implantes" autocomplete="off">
+      </div>
+      <div>
+        <label for="fPreguntas">Profundidad del análisis</label>
+        <select id="fPreguntas">
+          <option value="4">Rápido · 4 preguntas (gratis)</option>
+          <option value="10" selected>Estándar · 10 preguntas</option>
+          <option value="15">Informe completo · 15 preguntas</option>
+        </select>
+      </div>
+    </div>
+    <div class="row-actions">
+      <button class="btn btn-primary" id="btnGo">Analizar mi negocio</button>
+      <button class="btn btn-ghost" id="btnDemo">Ver un ejemplo</button>
+      <span class="hint" id="hintKey"></span>
+    </div>
+    <div class="err" id="err"></div>
+  </div>
+
+  <div class="card" id="progress">
+    <b id="pTitle">Consultando a la IA…</b>
+    <div class="bar"><i id="pBar"></i></div>
+    <div class="log" id="pLog"></div>
+  </div>
+
+  <div id="result"></div>
+
+  <footer>
+    <b>Cítame</b> — visibilidad de negocios en buscadores de IA. Los datos se consultan en vivo y no se almacenan en ningún servidor.
+    <span class="noprint">· Fuentes de mercado: SOCi Local Visibility Index 2026, Similarweb, Adobe.</span>
+  </footer>
+</div>
+
+<dialog id="dlg">
+  <h3>Ajustes</h3>
+  <p>Necesitas una clave de Google AI Studio (gratis, 5.000 consultas al mes). Se guarda solo en este navegador.</p>
+  <label for="cKey">Clave de API de Google Gemini</label>
+  <input id="cKey" placeholder="AIza…" autocomplete="off" spellcheck="false">
+  <p class="hint" style="margin:8px 0 16px">Consíguela en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> → "Create API key".</p>
+  <label for="cModel">Modelo</label>
+  <select id="cModel"><option value="">(detectar automáticamente)</option></select>
+  <div class="row-actions">
+    <button class="btn btn-primary" id="cSave">Guardar</button>
+    <button class="btn btn-ghost" id="cClose">Cerrar</button>
+    <button class="btn btn-ghost" id="cList">Detectar modelos</button>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const LS = { key:'citame_key', model:'citame_model' };
+const API = 'https://generativelanguage.googleapis.com/v1beta';
+
+let CFG = { key: localStorage.getItem(LS.key) || '', model: localStorage.getItem(LS.model) || '' };
+
+/* ► CONTACTO: pon aquí tu WhatsApp (con prefijo, sin +) y tu correo. */
+const CONTACTO = { whatsapp:'34600000000', email:'hola@citame.es' };
+
+function contratar(plan, neg){
+  const txt = `Hola, he hecho el análisis de "${neg.nombre}" (${neg.ciudad}) y quiero contratar: ${plan}.`;
+  const url = CONTACTO.whatsapp && !/^3460000/.test(CONTACTO.whatsapp)
+    ? `https://wa.me/${CONTACTO.whatsapp}?text=${encodeURIComponent(txt)}`
+    : `mailto:${CONTACTO.email}?subject=${encodeURIComponent('Cítame · '+plan)}&body=${encodeURIComponent(txt)}`;
+  window.open(url, '_blank', 'noopener');
+}
+
+/* ---------- utilidades ---------- */
+const norm = s => (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+  .replace(/\b(s\.?l\.?u?|s\.?a\.?|c\.?b\.?|sociedad limitada)\b/g,'')
+  .replace(/[^a-z0-9ñ ]/g,' ').replace(/\s+/g,' ').trim();
+const STOP = new Set(['de','la','el','los','las','del','y','en','centro','clinica','tienda','taller','bar','restaurante','grupo','servicios','the']);
+const tokens = s => norm(s).split(' ').filter(w => w.length>2 && !STOP.has(w));
+
+/* ¿el texto menciona al negocio? tolerante a variaciones del nombre */
+function mencionado(texto, nombre){
+  const t = norm(texto), tk = tokens(nombre);
+  if(!tk.length) return false;
+  if(t.includes(norm(nombre))) return true;
+  const hits = tk.filter(w => t.includes(w)).length;
+  return tk.length===1 ? hits===1 : hits >= Math.max(2, Math.ceil(tk.length*0.7));
+}
+const esc = s => (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function log(msg){ const l=$('#pLog'); l.textContent += msg+'\n'; l.scrollTop = l.scrollHeight; }
+function progreso(hecho,total){ $('#pBar').style.width = Math.round(hecho/total*100)+'%'; }
+function fallo(msg){ const e=$('#err'); e.textContent = msg; e.style.display='block'; }
+
+/* ---------- capa Gemini ---------- */
+async function gemini(prompt, {buscar=false, json=false} = {}){
+  const model = CFG.model || 'gemini-2.5-flash';
+  const body = { contents:[{ role:'user', parts:[{text:prompt}] }] };
+  if(buscar) body.tools = [{ google_search:{} }];            // grounding: la IA busca de verdad
+  else if(json) body.generationConfig = { responseMimeType:'application/json', temperature:0 };
+  const r = await fetch(`${API}/models/${model}:generateContent?key=${encodeURIComponent(CFG.key)}`,{
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
+  });
+  if(!r.ok){
+    const t = await r.text().catch(()=> '');
+    throw new Error(`API ${r.status}: ${t.slice(0,180)}`);
+  }
+  const d = await r.json();
+  const cand = d.candidates && d.candidates[0];
+  const texto = (cand?.content?.parts || []).map(p=>p.text).filter(Boolean).join('\n').trim();
+  const fuentes = (cand?.groundingMetadata?.groundingChunks || [])
+      .map(c => c.web && (c.web.domain || c.web.title)).filter(Boolean);
+  return { texto, fuentes };
+}
+
+function parseJSON(txt){
+  if(!txt) return null;
+  const limpio = txt.replace(/^```(?:json)?/i,'').replace(/```$/,'').trim();
+  try { return JSON.parse(limpio); } catch(_){}
+  const m = limpio.match(/[\[{][\s\S]*[\]}]/);
+  if(m){ try { return JSON.parse(m[0]); } catch(_){} }
+  return null;
+}
+
+/* modelos disponibles en la cuenta → evita depender de un nombre concreto */
+async function detectarModelos(){
+  const r = await fetch(`${API}/models?key=${encodeURIComponent(CFG.key)}&pageSize=200`);
+  if(!r.ok) throw new Error('No se pudo listar modelos ('+r.status+')');
+  const d = await r.json();
+  const ok = (d.models||[])
+    .filter(m => (m.supportedGenerationMethods||[]).includes('generateContent'))
+    .map(m => m.name.replace('models/',''))
+    .filter(n => !/embedding|aqa|image|tts|vision|live|native-audio/i.test(n));
+  const pref = n => (/flash/.test(n)?0:1) + (/lite/.test(n)?.5:0) + (/preview|exp/.test(n)?2:0);
+  ok.sort((a,b)=> pref(a)-pref(b) || b.localeCompare(a));
+  return ok;
+}
+
+/* ---------- el análisis ---------- */
+async function generarPreguntas(neg, n){
+  const p = `Eres un consumidor de ${neg.ciudad} (España) que busca "${neg.actividad}".
+Escribe ${n} preguntas REALES y variadas que le escribirías a ChatGPT para encontrar ese servicio.
+Mezcla: recomendación general, "el mejor", urgencia, precio/barato, mejor valorado, cercanía, una especialidad concreta y una comparativa.
+NUNCA menciones marcas ni nombres de empresa. Cada pregunta debe incluir la ciudad.
+Devuelve SOLO un array JSON de ${n} strings.`;
+  const { texto } = await gemini(p, {json:true});
+  const arr = parseJSON(texto);
+  if(Array.isArray(arr) && arr.length) return arr.slice(0,n).map(String);
+  return [`mejores ${neg.actividad} en ${neg.ciudad}`,
+          `¿qué ${neg.actividad} me recomiendas en ${neg.ciudad}?`,
+          `${neg.actividad} en ${neg.ciudad} buenos y baratos`,
+          `${neg.actividad} de urgencia en ${neg.ciudad}`].slice(0,n);
+}
+
+async function extraerNegocios(respuesta, neg){
+  const p = `De este texto, extrae SOLO los nombres propios de negocios/empresas concretos que se recomiendan, en el orden en que aparecen (ignora categorías genéricas, portales, directorios y webs).
+Texto:
+"""${respuesta.slice(0,6000)}"""
+Devuelve JSON: {"negocios":["..."],"objetivo":true|false,"posicion":n|null} donde "objetivo" indica si "${neg.nombre}" está entre ellos y "posicion" su puesto (1 = primero).`;
+  const { texto } = await gemini(p, {json:true});
+  const j = parseJSON(texto) || {};
+  const lista = Array.isArray(j.negocios) ? j.negocios.map(String) : [];
+  let objetivo = !!j.objetivo, pos = Number(j.posicion)||null;
+  const idx = lista.findIndex(x => mencionado(x, neg.nombre));
+  if(idx >= 0){ objetivo = true; pos = idx+1; }
+  else if(!objetivo && mencionado(respuesta, neg.nombre)){ objetivo = true; pos = pos || lista.length+1; }
+  return { lista, objetivo, pos };
+}
+
+const PUNTOS = p => p===1?100 : p===2?80 : p===3?65 : p<=5?50 : 35;
+
+async function analizar(neg, nPreg){
+  $('#form').style.display='none'; $('#progress').style.display='block';
+  $('#pLog').textContent=''; progreso(0,1);
+  $('#pTitle').textContent = `Analizando "${neg.nombre}" en ${neg.ciudad}…`;
+
+  log('▸ Generando las preguntas que haría un cliente real…');
+  const preguntas = await generarPreguntas(neg, nPreg);
+  log(`  ${preguntas.length} preguntas listas.\n`);
+
+  const filas = [], competidores = new Map(), fuentes = new Map();
+  let hechas = 0;
+
+  for(const q of preguntas){
+    try{
+      const { texto, fuentes:fs } = await gemini(
+        `${q}\n\n(Responde como asistente a un usuario real: recomienda negocios CONCRETOS con su nombre, los que de verdad encuentres para esa ciudad.)`,
+        {buscar:true});
+      const { lista, objetivo, pos } = await extraerNegocios(texto, neg);
+      filas.push({ q, objetivo, pos, lista });
+      lista.forEach((n,i) => {
+        if(mencionado(n, neg.nombre)) return;
+        const k = n.trim().replace(/\s+/g,' ');
+        const prev = competidores.get(k) || {n:k, veces:0, puntos:0};
+        prev.veces++; prev.puntos += PUNTOS(i+1); competidores.set(k, prev);
+      });
+      fs.forEach(f => {
+        const d = String(f).replace(/^www\./,'').toLowerCase();
+        fuentes.set(d, (fuentes.get(d)||0)+1);
+      });
+      log(`${objetivo ? '✅ TE CITA' : '❌ no te cita'} · ${q.slice(0,70)}`);
+    }catch(e){
+      log(`⚠️  error en "${q.slice(0,40)}…": ${e.message}`);
+    }
+    progreso(++hechas, preguntas.length);
+  }
+  if(!filas.length) throw new Error('No se pudo completar ninguna consulta. Revisa la clave de API en Ajustes.');
+
+  const citas = filas.filter(f=>f.objetivo);
+  const score = Math.round(filas.reduce((a,f)=> a + (f.objetivo ? PUNTOS(f.pos||6) : 0), 0) / filas.length);
+  const rivales = [...competidores.values()].sort((a,b)=> b.puntos-a.puntos || b.veces-a.veces).slice(0,8);
+  const srcs = [...fuentes.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10);
+
+  $('#progress').style.display='none';
+  pintar({ neg, filas, score, citas:citas.length, rivales, srcs });
+}
+
+/* ---------- informe ---------- */
+function pintar(d){
+  const { neg, filas, score, citas, rivales, srcs } = d;
+  const pct = Math.max(0, Math.min(100, score));
+  const C = 2*Math.PI*64, color = pct<25?'var(--bad)':pct<60?'var(--warn)':'var(--ok)';
+  const tag = pct<25 ? ['t-bad','INVISIBLE PARA LA IA'] : pct<60 ? ['t-warn','VISIBILIDAD DÉBIL'] : ['t-ok','BIEN POSICIONADO'];
+  const titular = pct<25
+    ? `La IA no recomienda tu negocio`
+    : pct<60 ? `Apareces, pero por detrás de tus competidores` : `Tu negocio ya se lleva recomendaciones`;
+  const bajada = pct<25
+    ? `De ${filas.length} preguntas que haría un cliente de ${neg.ciudad}, la IA te ha nombrado en ${citas}. Los clientes que preguntan por "${neg.actividad}" están siendo enviados a otros negocios.`
+    : pct<60 ? `Te menciona en ${citas} de ${filas.length} preguntas, pero casi nunca en primer lugar. La primera recomendación se lleva la mayor parte de las visitas.`
+    : `Te menciona en ${citas} de ${filas.length} preguntas y en buenas posiciones. Toca defender la posición: esto se mueve cada mes.`;
+
+  const plan = construirPlan(d);
+
+  $('#result').innerHTML = `
+  <div class="card">
+    <div class="score-head">
+      <div class="gauge">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="64" fill="none" stroke="var(--line)" stroke-width="13"/>
+          <circle cx="75" cy="75" r="64" fill="none" stroke="${color}" stroke-width="13" stroke-linecap="round"
+                  stroke-dasharray="${C}" stroke-dashoffset="${C - C*pct/100}"/>
+        </svg>
+        <div class="val"><b>${pct}</b><span>de 100</span></div>
+      </div>
+      <div class="verdict">
+        <span class="tag ${tag[0]}">${tag[1]}</span>
+        <h2>${esc(titular)}</h2>
+        <p>${esc(bajada)}</p>
+      </div>
+    </div>
+
+    <section class="block">
+      <h3>Qué contesta la IA, pregunta por pregunta</h3>
+      <table><thead><tr><th>Pregunta del cliente</th><th style="width:110px">¿Sales tú?</th><th style="width:36%">A quién recomienda</th></tr></thead><tbody>
+      ${filas.map(f=>`<tr>
+        <td class="q">${esc(f.q)}</td>
+        <td>${f.objetivo ? `<span class="pill p-si">Sí · nº ${f.pos||'?'}</span>` : `<span class="pill p-no">No apareces</span>`}</td>
+        <td class="who">${esc(f.lista.slice(0,3).join(' · ')) || '—'}</td></tr>`).join('')}
+      </tbody></table>
+    </section>
+
+    ${rivales.length ? `<section class="block">
+      <h3>Quién se está quedando tus clientes</h3>
+      ${rivales.map((r,i)=>`<div class="rank"><span class="n">${i+1}</span><span class="nm">${esc(r.n)}</span>
+        <span class="ct">${r.veces} de ${filas.length} preguntas</span></div>`).join('')}
+    </section>`:''}
+
+    ${srcs.length ? `<section class="block">
+      <h3>Las fuentes que la IA lee para recomendar en tu sector <span style="text-transform:none;letter-spacing:0;font-weight:500">— aquí es donde tienes que estar</span></h3>
+      <div class="srcs">${srcs.map(([dom,n])=>`<span class="src">${esc(dom)} <b>×${n}</b></span>`).join('')}</div>
+    </section>`:''}
+
+    <section class="block">
+      <h3>Tu plan de acción</h3>
+      <ol class="plan">${plan.map(p=>`<li><b>${esc(p.t)}</b><span>${esc(p.d)}</span></li>`).join('')}</ol>
+    </section>
+  </div>
+
+  <div class="cta noprint">
+    <h3>Esto cambia cada mes</h3>
+    <p>Las respuestas de la IA se reescriben constantemente: hoy no sales, mañana puedes salir el primero — o al revés. La vigilancia mensual te avisa cuando entras, cuando caes y qué competidor te ha adelantado.</p>
+    <button class="btn" onclick="window.print()">Descargar este informe en PDF</button>
+    <button class="btn btn-ghost" onclick="location.reload()">Analizar otro negocio</button>
+  </div>
+
+  <div class="planes noprint">
+    <div class="plan-c">
+      <h4>Informe completo</h4>
+      <div class="precio">49 €<small> pago único</small></div>
+      <ul>
+        <li>15 preguntas reales de cliente</li>
+        <li>Comparativa con tus competidores</li>
+        <li>Las fuentes que lee la IA en tu sector</li>
+        <li>Plan de acción por escrito</li>
+      </ul>
+      <button class="btn btn-ghost" data-plan="Informe completo (49 €)">Lo quiero</button>
+    </div>
+    <div class="plan-c destacado">
+      <span class="et">Recomendado</span>
+      <h4>Vigilancia mensual</h4>
+      <div class="precio">29 €<small> /mes</small></div>
+      <ul>
+        <li>Todo lo del informe, cada mes</li>
+        <li>Aviso cuando entras o desapareces</li>
+        <li>Aviso si un competidor te adelanta</li>
+        <li>Sin permanencia</li>
+      </ul>
+      <button class="btn btn-primary" data-plan="Vigilancia mensual (29 €/mes)">Empezar</button>
+    </div>
+  </div>`;
+  $('#result').querySelectorAll('[data-plan]').forEach(b => b.onclick = () => contratar(b.dataset.plan, neg));
+  $('#result').style.display='block';
+  $('#result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function construirPlan(d){
+  const { neg, score, srcs, filas, rivales } = d;
+  const p = [];
+  if(score < 60){
+    p.push({t:'Consigue que exista una página tuya que la IA pueda citar',
+      d:`La IA solo recomienda lo que puede leer y verificar. Necesitas una página propia con el nombre exacto "${neg.nombre}", dirección, teléfono, horario y una lista clara de servicios de ${neg.actividad} en ${neg.ciudad} — escrita en frases que respondan a las preguntas de arriba.`});
+  }
+  if(srcs.length){
+    p.push({t:`Entra en las fuentes que la IA consulta (${srcs.slice(0,3).map(s=>s[0]).join(', ')})`,
+      d:'Estas son las webs de las que la IA saca sus recomendaciones en tu sector y tu ciudad. Estar dado de alta y con la ficha completa en ellas es la palanca más rápida: no dependes de posicionar tu web, sino de aparecer donde ella ya lee.'});
+  }
+  p.push({t:'Datos idénticos en todas partes (nombre, dirección, teléfono)',
+    d:'Cualquier variación entre Google, tu web y los directorios rompe la identificación del negocio y la IA descarta la ficha por dudosa. Un solo formato, copiado y pegado en todos los sitios.'});
+  const preg = filas.filter(f=>!f.objetivo).slice(0,2).map(f=>`"${f.q}"`).join(' y ');
+  if(preg) p.push({t:'Responde con tus propias palabras a las preguntas que hoy fallas',
+    d:`Publica una sección de preguntas frecuentes que conteste literalmente ${preg}. Los modelos citan textos que ya vienen en formato de respuesta.`});
+  if(rivales.length) p.push({t:`Estudia por qué sale ${rivales[0].n}`,
+    d:'Mira dónde está publicado, qué reseñas tiene y qué información da que tú no das. No hace falta adivinar: la IA ya te ha dicho a quién prefiere.'});
+  p.push({t:'Vuelve a medir dentro de 30 días',
+    d:'Sin medición no sabes si lo que has hecho ha funcionado. El indicador que importa es en cuántas preguntas te nombra y en qué puesto.'});
+  return p;
+}
+
+/* ---------- demo sin clave ---------- */
+function demo(){
+  const neg = {nombre:'Clínica Dental Sonrisa', ciudad:'Murcia', actividad:'clínica dental / implantes'};
+  const F = (q,o,p,l)=>({q,objetivo:o,pos:p,lista:l});
+  pintar({ neg, score:18, citas:2,
+    filas:[
+      F('¿Cuál es la mejor clínica dental en Murcia?',false,null,['Dental Corporación Vega','Clínica Ortiz','Instituto Dental Segura']),
+      F('clínicas dentales baratas en Murcia con financiación',false,null,['Vitaldent Murcia','Dental Vega']),
+      F('¿dónde ponerme implantes dentales en Murcia?',true,4,['Instituto Dental Segura','Clínica Ortiz','Dental Vega','Clínica Dental Sonrisa']),
+      F('dentista de urgencias en Murcia hoy',false,null,['Clínica Ortiz','Urgencias Dentales Murcia']),
+      F('clínica dental mejor valorada de Murcia centro',false,null,['Instituto Dental Segura','Clínica Ortiz']),
+      F('ortodoncia invisible en Murcia, ¿qué clínica recomiendas?',true,5,['Ortodoncia Murcia','Dental Vega','Clínica Ortiz','Invisalign Center','Clínica Dental Sonrisa'])],
+    rivales:[{n:'Clínica Ortiz',veces:4,puntos:0},{n:'Instituto Dental Segura',veces:3,puntos:0},
+             {n:'Dental Vega',veces:3,puntos:0},{n:'Vitaldent Murcia',veces:1,puntos:0}],
+    srcs:[['doctoralia.es',5],['google.com',4],['paginasamarillas.es',3],['topdoctors.es',2],['dentistasmurcia.org',2],['facebook.com',1]] });
+}
+
+/* ---------- eventos ---------- */
+function pintarHint(){
+  $('#hintKey').innerHTML = CFG.key
+    ? `Clave configurada · modelo <code>${esc(CFG.model||'auto')}</code>`
+    : `Sin clave todavía → pulsa <b>Ajustes</b> (es gratis)`;
+}
+$('#btnCfg').onclick = ()=>{ $('#cKey').value = CFG.key; $('#dlg').showModal(); };
+$('#cClose').onclick = ()=> $('#dlg').close();
+$('#cSave').onclick = ()=>{
+  CFG.key = $('#cKey').value.trim(); CFG.model = $('#cModel').value;
+  localStorage.setItem(LS.key, CFG.key); localStorage.setItem(LS.model, CFG.model);
+  pintarHint(); $('#dlg').close();
+};
+$('#cList').onclick = async ()=>{
+  CFG.key = $('#cKey').value.trim();
+  const sel = $('#cModel');
+  sel.innerHTML = '<option>detectando…</option>';
+  try{
+    const ms = await detectarModelos();
+    sel.innerHTML = '<option value="">(automático)</option>' + ms.map(m=>`<option value="${m}">${m}</option>`).join('');
+    if(CFG.model && ms.includes(CFG.model)) sel.value = CFG.model;
+    else if(ms.length) sel.value = ms[0];
+  }catch(e){ sel.innerHTML = `<option value="">${esc(e.message)}</option>`; }
+};
+$('#btnDemo').onclick = demo;
+$('#btnGo').onclick = async ()=>{
+  $('#err').style.display='none';
+  const neg = { nombre:$('#fNombre').value.trim(), ciudad:$('#fCiudad').value.trim(), actividad:$('#fActividad').value.trim() };
+  if(!neg.nombre || !neg.ciudad || !neg.actividad) return fallo('Rellena nombre, ciudad y actividad.');
+  if(!CFG.key){ $('#dlg').showModal(); return fallo('Configura primero tu clave de Google AI Studio (es gratuita).'); }
+  $('#btnGo').disabled = true;
+  try{
+    if(!CFG.model){
+      try{ const ms = await detectarModelos(); if(ms.length){ CFG.model = ms[0]; localStorage.setItem(LS.model, CFG.model); } }catch(_){}
+    }
+    await analizar(neg, parseInt($('#fPreguntas').value,10));
+  }catch(e){
+    $('#progress').style.display='none'; $('#form').style.display='block';
+    fallo(e.message.includes('API 400') ? 'La clave no es válida o el modelo no admite búsqueda. Abre Ajustes → Detectar modelos.' : e.message);
+  }finally{ $('#btnGo').disabled = false; }
+};
+pintarHint();
+if(location.hash === '#ejemplo' || location.hash === '#demo') demo();   // enlace compartible con informe de muestra
+</script>
+</body>
+</html>
