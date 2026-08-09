@@ -35,7 +35,7 @@ export default {
     const tope = parseInt(env.LIMITE_DIA || '60', 10);
     if (env.CUOTA) {
       const hoy = new Date().toISOString().slice(0, 10);
-      const clave = `q:${hoy}:${ip}`;
+      const clave = 'q:' + hoy + ':' + ip;
       const usadas = parseInt((await env.CUOTA.get(clave)) || '0', 10);
       if (usadas >= tope) return json({ error: 'daily limit reached' }, 429, cors);
       ctx.waitUntil(env.CUOTA.put(clave, String(usadas + 1), { expirationTtl: 172800 }));
@@ -57,7 +57,7 @@ export default {
     const m = await modelo(env);
     let r;
     try {
-      r = await fetch(`${API}/models/${m}:generateContent?key=${env.GEMINI_KEY}`, {
+      r = await fetch(API + '/models/' + m + ':generateContent?key=' + env.GEMINI_KEY, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(peticion)
       });
     } catch (e) { return json({ error: 'no se pudo contactar con el modelo' }, 502, cors); }
@@ -65,7 +65,7 @@ export default {
     if (!r.ok) {
       const detalle = (await r.text().catch(() => '')).slice(0, 300);
       // 429 = cuota mensual agotada; se lo decimos claro al cliente sin filtrar la clave
-      return json({ error: r.status === 429 ? 'quota exhausted' : `upstream ${r.status}`, detalle }, r.status === 429 ? 429 : 502, cors);
+      return json({ error: r.status === 429 ? 'quota exhausted' : 'upstream ' + r.status, detalle }, r.status === 429 ? 429 : 502, cors);
     }
 
     const d = await r.json();
@@ -84,7 +84,7 @@ async function modelo(env) {
   if (env.MODELO) return env.MODELO;
   if (MODELO_CACHE) return MODELO_CACHE;
   try {
-    const r = await fetch(`${API}/models?key=${env.GEMINI_KEY}&pageSize=200`);
+    const r = await fetch(API + '/models?key=' + env.GEMINI_KEY + '&pageSize=200');
     if (r.ok) {
       const d = await r.json();
       const dis = (d.models || [])
