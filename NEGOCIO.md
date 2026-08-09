@@ -1,4 +1,4 @@
-# CiteMe — visibilidad de negocios locales en la IA (Florida / EE.UU.)
+﻿# CiteMe — visibilidad de negocios locales en la IA (Florida / EE.UU.)
 
 **Qué vendo:** le digo a un negocio local si ChatGPT/Gemini/Perplexity lo recomiendan cuando un
 cliente busca su servicio en su ciudad, le enseño a quién recomiendan en su lugar y le doy el
@@ -58,7 +58,8 @@ reformas y techos, HVAC, veterinarios, autoescuelas, talleres.
 - [x] Backend en Cloudflare Workers con la clave escondida, CORS cerrado y tope por IP.
 - [x] Informe imprimible a PDF — es el entregable de pago.
 - [x] Publicada en GitHub Pages.
-- [ ] Desplegar el Worker y pegar su URL (ver `README.md`).
+- [x] Worker desplegado en https://citeme-api.citemeai.workers.dev y conectado a la web.
+- [ ] Pegar el secreto `GEMINI_KEY` en el panel del Worker (paso 2 del README).
 - [ ] Poner WhatsApp/correo en la constante `CONTACTO`.
 - [ ] Cobro: enlace de pago de Stripe pegado en los botones de plan.
 

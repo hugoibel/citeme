@@ -1,4 +1,4 @@
-# CiteMe
+﻿# CiteMe
 
 Comprueba si la IA (ChatGPT, Gemini, Perplexity) recomienda un negocio local cuando un cliente
 busca ese servicio en su ciudad — y enseña **por qué recomienda a otros**.
@@ -11,10 +11,19 @@ busca ese servicio en su ciudad — y enseña **por qué recomienda a otros**.
 
 ---
 
-## 1. Desplegar el backend (10 minutos, gratis)
+## Estado del backend
 
-Sin esto la web funciona, pero cada visitante tendría que poner su propia clave. Con esto
-funciona para cualquiera.
+✅ **Desplegado y funcionando**: `https://citeme-api.citemeai.workers.dev`
+(cuenta `Hugoibel91@gmail.com`, subdominio `citemeai`, script `citeme-api`).
+La web ya apunta a él. Comprobar en cualquier momento:
+[`/health`](https://citeme-api.citemeai.workers.dev/health) → debe responder `{"ok":true,…}`.
+
+⏳ **Falta un paso manual**: pegar el secreto `GEMINI_KEY` (ver punto 3). Hasta entonces
+`/ask` responde `{"error":"falta configurar GEMINI_KEY"}`.
+
+## 1. Volver a desplegar el backend (si lo cambias)
+
+Solo hace falta si editas `worker/worker.js`.
 
 ### Camino A — desde el panel (sin instalar nada)
 
@@ -39,18 +48,27 @@ npx wrangler deploy
 
 ### Conectar la web con el backend
 
-Edita `index.html`, línea de la constante `BACKEND`, y pon tu URL:
+Ya está hecho — `index.html` tiene:
 
 ```js
-const BACKEND = localStorage.getItem('citeme_backend') || "https://citeme-api.TU-CUENTA.workers.dev";
+const BACKEND = localStorage.getItem('citeme_backend') || "https://citeme-api.citemeai.workers.dev";
 ```
 
-Haz `git add index.html && git commit -m "conectar backend" && git push`. En 1 minuto está vivo.
-
-> Para probarlo sin publicar: abre la consola del navegador en la web y ejecuta
+> Para apuntar a otro backend sin tocar el código: abre la consola del navegador y ejecuta
 > `localStorage.setItem('citeme_backend','https://…workers.dev')`, recarga y listo.
 
-## 2. Control del gasto
+## 2. Poner la clave de Gemini (paso pendiente)
+
+1. Consigue la clave en [aistudio.google.com/apikey](https://aistudio.google.com/apikey) → **Create API key**.
+2. [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages** → **citeme-api** →
+   **Settings** → **Variables and Secrets** → **Add**:
+   - Type: **Secret** · Name: `GEMINI_KEY` · Value: la clave · **Deploy**.
+3. Comprueba que [`/health`](https://citeme-api.citemeai.workers.dev/health) sigue OK y prueba
+   la web: ya no debe pedir clave a nadie.
+
+Por línea de comandos sería `cd worker && npx wrangler secret put GEMINI_KEY`.
+
+## 3. Control del gasto
 
 - Gemini regala **5.000 consultas con búsqueda al mes**. Un análisis gratuito (4 preguntas)
   gasta ~9 → unos **550 análisis gratis al mes**. Sin tarjeta en Google Cloud **no puede
@@ -59,7 +77,7 @@ Haz `git add index.html && git commit -m "conectar backend" && git push`. En 1 m
   `npx wrangler kv namespace create CUOTA` y descomenta el bloque en `wrangler.toml`.
 - Los análisis de 10 y 15 preguntas quedan bloqueados en la web pública (son los de pago).
 
-## 3. Poner tu contacto
+## 4. Poner tu contacto
 
 En `index.html`:
 
