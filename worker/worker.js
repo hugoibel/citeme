@@ -7,14 +7,18 @@
  * Variables que hay que poner en Cloudflare:
  *   GEMINI_KEY   (secret)  → la clave de aistudio.google.com/apikey
  *   ORIGENES     (var)     → dominios permitidos, separados por comas
- *                            ej: https://hugoibel.github.io,http://localhost:8080
- *   MODELO       (var, opcional) → por defecto se autodetecta
+ *   MODELO       (var, opcional) → fija el modelo; por defecto se elige solo
  *   LIMITE_DIA   (var, opcional) → consultas por IP y día (por defecto 60)
  * Opcional: un KV llamado CUOTA para que el límite por IP sea de verdad.
+ *
+ * Nota: el catálogo de Gemini cambia solo y hay modelos que SIGUEN LISTADOS pero
+ * ya no admiten cuentas nuevas (dan 404 al usarlos). Por eso no se fija un id:
+ * se ordenan los disponibles de más nuevo a más viejo y, si uno da 404, se pasa
+ * al siguiente y se recuerda el que funcionó.
  */
 
-const MODELOS_PREF = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-flash-latest'];
 const API = 'https://generativelanguage.googleapis.com/v1beta';
+const RESERVA = ['gemini-flash-latest', 'gemini-2.0-flash'];
 
 export default {
   async fetch(req, env, ctx) {
@@ -23,23 +27,18 @@ export default {
     const cors = cabecerasCORS(origen, env);
 
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
-    if (url.pathname === '/' || url.pathname === '/health')
-      return json({ ok: true, servicio: 'citeme', modelo: await modelo(env) }, 200, cors);
+
+    if (url.pathname === '/' || url.pathname === '/health') {
+      const lista = await candidatos(env);
+      return json({ ok: true, servicio: 'citeme', modelo: lista[0] || null, clave: !!env.GEMINI_KEY }, 200, cors);
+    }
+    if (url.pathname === '/modelos') {
+      return json({ disponibles: await candidatos(env), enUso: MODELO_OK }, 200, cors);
+    }
     if (url.pathname !== '/ask') return json({ error: 'not found' }, 404, cors);
     if (req.method !== 'POST') return json({ error: 'use POST' }, 405, cors);
     if (!cors['Access-Control-Allow-Origin']) return json({ error: 'origen no permitido' }, 403, {});
     if (!env.GEMINI_KEY) return json({ error: 'falta configurar GEMINI_KEY' }, 500, cors);
-
-    // ── control de gasto: tope por IP y día ──
-    const ip = req.headers.get('CF-Connecting-IP') || 'anon';
-    const tope = parseInt(env.LIMITE_DIA || '60', 10);
-    if (env.CUOTA) {
-      const hoy = new Date().toISOString().slice(0, 10);
-      const clave = 'q:' + hoy + ':' + ip;
-      const usadas = parseInt((await env.CUOTA.get(clave)) || '0', 10);
-      if (usadas >= tope) return json({ error: 'daily limit reached' }, 429, cors);
-      ctx.waitUntil(env.CUOTA.put(clave, String(usadas + 1), { expirationTtl: 172800 }));
-    }
 
     // ── validación de entrada ──
     let body;
@@ -48,55 +47,113 @@ export default {
     if (!prompt) return json({ error: 'falta prompt' }, 400, cors);
     if (prompt.length > 8000) return json({ error: 'prompt demasiado largo' }, 413, cors);
     const buscar = body.buscar === true, wantJson = body.json === true;
+    // Modelo concreto (diagnóstico); solo se acepta si está en el catálogo real.
+    const pedido = typeof body.modelo === 'string' ? body.modelo : null;
+
+    // ── control de gasto: tope por IP y día ──
+    const ip = req.headers.get('CF-Connecting-IP') || 'anon';
+    const tope = parseInt(env.LIMITE_DIA || '60', 10);
+    if (env.CUOTA) {
+      const clave = 'q:' + new Date().toISOString().slice(0, 10) + ':' + ip;
+      const usadas = parseInt((await env.CUOTA.get(clave)) || '0', 10);
+      if (usadas >= tope) return json({ error: 'daily limit reached' }, 429, cors);
+      ctx.waitUntil(env.CUOTA.put(clave, String(usadas + 1), { expirationTtl: 172800 }));
+    }
 
     // ── llamada a Gemini ──
     const peticion = { contents: [{ role: 'user', parts: [{ text: prompt }] }] };
     if (buscar) peticion.tools = [{ google_search: {} }];
     else if (wantJson) peticion.generationConfig = { responseMimeType: 'application/json', temperature: 0 };
 
-    const m = await modelo(env);
+    const res = await llamarGemini(env, peticion, buscar, pedido);
+    if (res.error) return json({ error: res.error, detalle: res.detalle }, res.status, cors);
+
+    const c = res.datos.candidates && res.datos.candidates[0];
+    return json({
+      texto: (c?.content?.parts || []).map(p => p.text).filter(Boolean).join('\n').trim(),
+      fuentes: (c?.groundingMetadata?.groundingChunks || [])
+        .map(g => g.web && (g.web.domain || g.web.title)).filter(Boolean),
+      modelo: res.modelo
+    }, 200, cors);
+  }
+};
+
+/* Prueba los modelos por orden hasta que uno responda; recuerda el que funcionó. */
+let MODELO_OK = null;
+async function llamarGemini(env, peticion, buscar, pedido) {
+  const lista = await candidatos(env);
+  let orden;
+  if (pedido && lista.includes(pedido)) orden = [pedido];
+  else if (buscar && env.MODELO_BUSQUEDA) {
+    // La búsqueda web solo es gratis en algunos modelos: se elige aparte.
+    orden = [env.MODELO_BUSQUEDA, ...lista.filter(m => m !== env.MODELO_BUSQUEDA)];
+  } else {
+    orden = MODELO_OK ? [MODELO_OK, ...lista.filter(m => m !== MODELO_OK)] : lista;
+  }
+  let ultimo = { error: 'sin modelos disponibles', status: 502, detalle: '' };
+
+  for (const m of orden.slice(0, 4)) {
     let r;
     try {
       r = await fetch(API + '/models/' + m + ':generateContent?key=' + env.GEMINI_KEY, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(peticion)
       });
-    } catch (e) { return json({ error: 'no se pudo contactar con el modelo' }, 502, cors); }
-
-    if (!r.ok) {
-      const detalle = (await r.text().catch(() => '')).slice(0, 300);
-      // 429 = cuota mensual agotada; se lo decimos claro al cliente sin filtrar la clave
-      return json({ error: r.status === 429 ? 'quota exhausted' : 'upstream ' + r.status, detalle }, r.status === 429 ? 429 : 502, cors);
+    } catch (e) {
+      ultimo = { error: 'no se pudo contactar con el modelo', status: 502, detalle: '' };
+      continue;
     }
+    if (r.ok) { if (!buscar && !pedido) MODELO_OK = m; return { datos: await r.json(), modelo: m }; }
 
-    const d = await r.json();
-    const c = d.candidates && d.candidates[0];
-    return json({
-      texto: (c?.content?.parts || []).map(p => p.text).filter(Boolean).join('\n').trim(),
-      fuentes: (c?.groundingMetadata?.groundingChunks || [])
-        .map(g => g.web && (g.web.domain || g.web.title)).filter(Boolean)
-    }, 200, cors);
+    const detalle = (await r.text().catch(() => '')).slice(0, 300);
+    if (r.status === 429) return { error: 'quota exhausted', status: 429, detalle };
+    // 404 = ese modelo no sirve para esta cuenta → probar el siguiente
+    if (r.status === 404 || r.status === 400) {
+      if (MODELO_OK === m) MODELO_OK = null;
+      ultimo = { error: 'upstream ' + r.status, status: 502, detalle };
+      continue;
+    }
+    return { error: 'upstream ' + r.status, status: 502, detalle };
   }
-};
+  return ultimo;
+}
 
-/* Detecta un modelo válido una vez y lo cachea en el aislado (los ids cambian con el tiempo). */
-let MODELO_CACHE = null;
-async function modelo(env) {
-  if (env.MODELO) return env.MODELO;
-  if (MODELO_CACHE) return MODELO_CACHE;
+/* Modelos utilizables, del más nuevo al más viejo. */
+let CACHE = null;
+async function candidatos(env) {
+  if (env.MODELO) return [env.MODELO];
+  if (CACHE) return CACHE;
+  if (!env.GEMINI_KEY) return RESERVA;
   try {
-    const r = await fetch(API + '/models?key=' + env.GEMINI_KEY + '&pageSize=200');
+    const r = await fetch(API + '/models?key=' + env.GEMINI_KEY + '&pageSize=500');
     if (r.ok) {
       const d = await r.json();
-      const dis = (d.models || [])
+      const usables = (d.models || [])
         .filter(x => (x.supportedGenerationMethods || []).includes('generateContent'))
         .map(x => x.name.replace('models/', ''))
-        .filter(n => !/embedding|aqa|image|tts|vision|live|native-audio/i.test(n));
-      const elegido = MODELOS_PREF.find(p => dis.includes(p))
-        || dis.sort((a, b) => (/flash/.test(a) ? 0 : 1) - (/flash/.test(b) ? 0 : 1))[0];
-      if (elegido) return (MODELO_CACHE = elegido);
+        .filter(n => /^gemini/.test(n))
+        .filter(n => !/embedding|aqa|image|imagen|tts|audio|live|vision|robotics|learnlm|thinking/i.test(n));
+      if (usables.length) return (CACHE = usables.sort(comparar));
     }
   } catch (_) {}
-  return MODELOS_PREF[0];
+  return RESERVA;
+}
+
+/* Más nuevo primero; flash antes que pro; nada de preview/exp/lite si hay algo estable. */
+function comparar(a, b) {
+  return puntuar(b) - puntuar(a) || a.localeCompare(b);
+}
+function puntuar(n) {
+  const v = n.match(/gemini-(\d+)(?:[.-](\d+))?/);
+  // Un alias sin número (gemini-flash-latest) siempre apunta a un modelo vivo:
+  // es la apuesta más segura, por delante de cualquier versión concreta.
+  const version = v ? parseFloat(v[1] + '.' + (v[2] || '0')) : (/latest/.test(n) ? 99 : 0);
+  let p = version * 100;
+  if (/latest/.test(n)) p += 45;          // los alias -latest siempre apuntan a algo vivo
+  if (/flash/.test(n)) p += 30;           // suficiente para esta tarea y más barato
+  if (/lite/.test(n)) p -= 25;
+  if (/preview|exp/.test(n)) p -= 60;
+  if (/\d{2}-\d{2}$/.test(n)) p -= 15;    // instantáneas con fecha: se retiran antes
+  return p;
 }
 
 function cabecerasCORS(origen, env) {
