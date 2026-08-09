@@ -38,12 +38,22 @@ dos, y ningún competidor de $500/mes va a bajar a atender a un taller de Hialea
 Sectores que mejor pagan: dentistas, clínicas estéticas, abogados (accidentes, inmigración),
 reformas y techos, HVAC, veterinarios, autoescuelas, talleres.
 
-## Números
+## Números (verificados en producción, agosto 2026)
 
-- Coste por auditoría: **~0,30 $** (Gemini regala 5.000 consultas con búsqueda al mes ≈ 250
-  auditorías; Cloudflare Workers gratis hasta 100.000 peticiones/día).
-- Informe $99 → margen 99 %. Suscripción $49/mes → coste ~0,60 $/mes por cliente.
-- **Objetivo 90 días: 25 suscriptores = $1.225/mes** con ~15 $ de coste.
+La búsqueda web de Gemini **ya no está en el plan gratuito**. Con la facturación activada hay
+**5.000 búsquedas gratis al mes** y después $14 por cada 1.000 ($0,014 cada una).
+
+| Concepto | Búsquedas | Coste |
+|---|---|---|
+| Análisis gratuito (gancho) | 4 | $0,056 — o **$0** dentro de las 5.000 |
+| Informe completo | 15 | $0,21 → se vende a **$99** |
+| Vigilancia mensual | 15/mes | $0,21/mes → se vende a **$49/mes** |
+
+Las 5.000 gratis dan para **~1.250 análisis al mes sin pagar nada**. El Worker corta a 150
+búsquedas/día (4.500/mes) para no salirse de ahí, y a 20 por visitante. Cloudflare es gratis
+hasta 100.000 peticiones/día.
+
+- **Objetivo 90 días: 25 suscriptores = $1.225/mes** con ~$5 de coste.
 
 ## Escalera
 

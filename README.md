@@ -70,12 +70,29 @@ Por línea de comandos sería `cd worker && npx wrangler secret put GEMINI_KEY`.
 
 ## 3. Control del gasto
 
-- Gemini regala **5.000 consultas con búsqueda al mes**. Un análisis gratuito (4 preguntas)
-  gasta ~9 → unos **550 análisis gratis al mes**. Sin tarjeta en Google Cloud **no puede
-  cobrarte nada**: cuando se agota, el backend devuelve `quota exhausted`.
-- El Worker corta a **60 consultas por IP y día**. Para que el tope sea infalible, crea el KV:
-  `npx wrangler kv namespace create CUOTA` y descomenta el bloque en `wrangler.toml`.
-- Los análisis de 10 y 15 preguntas quedan bloqueados en la web pública (son los de pago).
+**La búsqueda web de Gemini ya no entra en el plan gratuito** (comprobado modelo por modelo en
+agosto de 2026: todos devuelven `429 quota exhausted`, y algunos 2.5 ni existen ya para cuentas
+nuevas). Hace falta activar la facturación en Google; a cambio entran **5.000 búsquedas gratis
+al mes**, y solo se paga a partir de ahí ($14 por cada 1.000).
+
+Para que la factura no pueda dispararse, el Worker lleva **dos topes** (KV `CUOTA`, ya creado)
+que solo cuentan las consultas con búsqueda, que son las únicas que cuestan:
+
+| Tope | Valor | Equivale a |
+|---|---|---|
+| `TOPE_GLOBAL_DIA` | 150 búsquedas/día | 4.500/mes → **por debajo de las 5.000 gratis** |
+| `LIMITE_DIA` (por IP) | 20 búsquedas/día | 5 análisis gratis por visitante |
+
+Consulta el gasto en cualquier momento en
+[`/consumo`](https://citeme-api.citemeai.workers.dev/consumo). Para cambiar los topes: panel del
+Worker → Settings → Variables. Los análisis de 10 y 15 preguntas están bloqueados en la web
+pública (son los de pago).
+
+### Endpoints de diagnóstico
+
+- `/health` — estado y si la clave está puesta.
+- `/modelos` — catálogo real de la cuenta, ordenado como los elige el Worker.
+- `/consumo` — búsquedas gastadas hoy y topes vigentes.
 
 ## 4. Poner tu contacto
 

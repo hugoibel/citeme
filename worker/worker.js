@@ -35,6 +35,14 @@ export default {
     if (url.pathname === '/modelos') {
       return json({ disponibles: await candidatos(env), enUso: MODELO_OK }, 200, cors);
     }
+    if (url.pathname === '/consumo') {
+      const hoy = new Date().toISOString().slice(0, 10);
+      const usadas = env.CUOTA ? parseInt((await env.CUOTA.get('global:' + hoy)) || '0', 10) : null;
+      return json({ fecha: hoy, busquedasHoy: usadas,
+                    topeDia: parseInt(env.TOPE_GLOBAL_DIA || '150', 10),
+                    topePorVisitante: parseInt(env.LIMITE_DIA || '20', 10),
+                    contadorActivo: !!env.CUOTA }, 200, cors);
+    }
     if (url.pathname !== '/ask') return json({ error: 'not found' }, 404, cors);
     if (req.method !== 'POST') return json({ error: 'use POST' }, 405, cors);
     if (!cors['Access-Control-Allow-Origin']) return json({ error: 'origen no permitido' }, 403, {});
@@ -51,13 +59,29 @@ export default {
     const pedido = typeof body.modelo === 'string' ? body.modelo : null;
 
     // ── control de gasto: tope por IP y día ──
-    const ip = req.headers.get('CF-Connecting-IP') || 'anon';
-    const tope = parseInt(env.LIMITE_DIA || '60', 10);
-    if (env.CUOTA) {
-      const clave = 'q:' + new Date().toISOString().slice(0, 10) + ':' + ip;
-      const usadas = parseInt((await env.CUOTA.get(clave)) || '0', 10);
-      if (usadas >= tope) return json({ error: 'daily limit reached' }, 429, cors);
-      ctx.waitUntil(env.CUOTA.put(clave, String(usadas + 1), { expirationTtl: 172800 }));
+    // ── control de gasto ──
+    // Solo se cuentan las consultas CON búsqueda: son las únicas que cuestan
+    // dinero. El tope global mantiene el consumo por debajo de la franja
+    // gratuita mensual de Google, así que la factura no puede dispararse.
+    // (KV es de consistencia eventual: bajo mucha concurrencia el contador
+    // puede quedarse algo corto. Es un tope de seguridad, no una caja.)
+    if (env.CUOTA && buscar) {
+      const hoy = new Date().toISOString().slice(0, 10);
+      const ip = req.headers.get('CF-Connecting-IP') || 'anon';
+      const topeIP = parseInt(env.LIMITE_DIA || '20', 10);
+      const topeGlobal = parseInt(env.TOPE_GLOBAL_DIA || '150', 10);
+
+      const clavGlobal = 'global:' + hoy, clavIP = 'ip:' + hoy + ':' + ip;
+      const [gTxt, uTxt] = await Promise.all([env.CUOTA.get(clavGlobal), env.CUOTA.get(clavIP)]);
+      const g = parseInt(gTxt || '0', 10), u = parseInt(uTxt || '0', 10);
+
+      if (g >= topeGlobal) return json({ error: 'daily limit reached', motivo: 'global' }, 429, cors);
+      if (u >= topeIP) return json({ error: 'daily limit reached', motivo: 'ip' }, 429, cors);
+
+      ctx.waitUntil(Promise.all([
+        env.CUOTA.put(clavGlobal, String(g + 1), { expirationTtl: 172800 }),
+        env.CUOTA.put(clavIP, String(u + 1), { expirationTtl: 172800 })
+      ]));
     }
 
     // ── llamada a Gemini ──
