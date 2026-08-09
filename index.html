@@ -216,7 +216,7 @@ dialog p{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
 /* ═══════════ CONFIGURACIÓN ═══════════
    BACKEND: URL del Cloudflare Worker. Con esto puesto, la web funciona para
    cualquiera sin pedir clave. Vacío = modo privado (cada uno pone su clave). */
-const BACKEND  = localStorage.getItem('citeme_backend') || "";
+const BACKEND  = localStorage.getItem('citeme_backend') || "https://citeme-api.citemeai.workers.dev";
 const CONTACTO = { whatsapp:"", email:"hello@citeme.app" };   // ← pon tu WhatsApp (1XXXXXXXXXX) y tu correo
 const PRECIOS  = { informe:"$99", vigilancia:"$49" };
 /* ════════════════════════════════════ */
