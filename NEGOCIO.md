@@ -62,16 +62,31 @@ hasta 100.000 peticiones/día.
 3. **$49/mes** — vigilancia: aviso cuando entras, cuando caes y quién te adelanta.
 4. **$299/mes marca blanca** — agencias y consultores locales revendiendo a sus clientes.
 
-## Estado
+## Estado (última sesión: 2026-08-08)
 
 - [x] App bilingüe (EN/ES) funcionando, un solo archivo.
-- [x] Backend en Cloudflare Workers con la clave escondida, CORS cerrado y tope por IP.
+- [x] Publicada en GitHub Pages → https://hugoibel.github.io/citeme/
+- [x] Backend desplegado → https://citeme-api.citemeai.workers.dev (`/health` responde `clave:true`).
+- [x] Clave de Gemini guardada como *Secret* y verificada: las consultas **sin** búsqueda
+      responden `200` con `gemini-flash-latest`.
+- [x] Topes de gasto activos (KV `CUOTA`): 150 búsquedas/día globales, 20 por visitante.
 - [x] Informe imprimible a PDF — es el entregable de pago.
-- [x] Publicada en GitHub Pages.
-- [x] Worker desplegado en https://citeme-api.citemeai.workers.dev y conectado a la web.
-- [ ] Pegar el secreto `GEMINI_KEY` en el panel del Worker (paso 2 del README).
-- [ ] Poner WhatsApp/correo en la constante `CONTACTO`.
-- [ ] Cobro: enlace de pago de Stripe pegado en los botones de plan.
+
+### 👉 POR DÓNDE SEGUIR
+
+1. **Activar la facturación de Google** (lo único que bloquea el producto).
+   [aistudio.google.com/apikey](https://aistudio.google.com/apikey) → fila de tu clave →
+   columna **Plan** → **Set up Billing**. Sin esto, las consultas **con búsqueda** devuelven
+   `429 quota exhausted` y el análisis no puede completarse: es el núcleo del producto.
+   Comprobado que **ningún** modelo del catálogo permite búsqueda en el plan gratuito.
+2. **Prueba de punta a punta** (pendiente, ~2 min). Sirve la app en `localhost:8080` con
+   `scratchpad/prueba/server.js`, que rellena el formulario y pulsa el botón solo; se vuelca
+   con Edge headless. Negocio de prueba recomendado: *Joe's Stone Crab · Miami Beach, FL ·
+   seafood restaurant* (existe y es muy citado → debe dar puntuación ALTA, lo que valida
+   también la detección positiva).
+3. **Poner el contacto**: constante `CONTACTO` en `index.html` (WhatsApp con el 1 delante).
+4. **Cobro**: enlaces de pago de Stripe en los botones de plan.
+5. Luego ya: los primeros 20 informes gratis (abajo).
 
 ## Primeros 7 días
 
