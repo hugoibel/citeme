@@ -62,7 +62,20 @@ hasta 100.000 peticiones/día.
 3. **$49/mes** — vigilancia: aviso cuando entras, cuando caes y quién te adelanta.
 4. **$299/mes marca blanca** — agencias y consultores locales revendiendo a sus clientes.
 
-## Estado (última sesión: 2026-08-08)
+## Estado (2026-08-11) — ✅ FUNCIONANDO DE PUNTA A PUNTA
+
+Facturación de Google activada ($25). Primer análisis real verificado:
+**Joe's Stone Crab · Miami Beach** → **38/100**, citado en 3 de 4 preguntas y nunca el primero.
+Competidores que se lo llevan: Stiltsville Fish Bar (3 de 4), A Fish Called Avalon, The Lobster
+Shack, My Ceviche. Fuentes que lee la IA: facebook.com, catchrestaurants.com,
+lobstershackmiami.com, miaminewtimes.com, miamicurated.com, atly.com.
+
+> Que una institución de Miami Beach con 113 años saque 38/100 es el mejor argumento de venta
+> que hay: si a ellos les pasa, a una clínica dental de barrio le pasa seguro.
+
+Consumo de esa prueba: 9 búsquedas de 150 diarias. Coste: **$0** (dentro de las 5.000 gratis).
+
+## Historial del estado
 
 - [x] App bilingüe (EN/ES) funcionando, un solo archivo.
 - [x] Publicada en GitHub Pages → https://hugoibel.github.io/citeme/
@@ -72,21 +85,16 @@ hasta 100.000 peticiones/día.
 - [x] Topes de gasto activos (KV `CUOTA`): 150 búsquedas/día globales, 20 por visitante.
 - [x] Informe imprimible a PDF — es el entregable de pago.
 
+- [x] **Facturación activada** y búsqueda web operativa.
+- [x] **Prueba de punta a punta superada** con un negocio real.
+
 ### 👉 POR DÓNDE SEGUIR
 
-1. **Activar la facturación de Google** (lo único que bloquea el producto).
-   [aistudio.google.com/apikey](https://aistudio.google.com/apikey) → fila de tu clave →
-   columna **Plan** → **Set up Billing**. Sin esto, las consultas **con búsqueda** devuelven
-   `429 quota exhausted` y el análisis no puede completarse: es el núcleo del producto.
-   Comprobado que **ningún** modelo del catálogo permite búsqueda en el plan gratuito.
-2. **Prueba de punta a punta** (pendiente, ~2 min). Sirve la app en `localhost:8080` con
-   `scratchpad/prueba/server.js`, que rellena el formulario y pulsa el botón solo; se vuelca
-   con Edge headless. Negocio de prueba recomendado: *Joe's Stone Crab · Miami Beach, FL ·
-   seafood restaurant* (existe y es muy citado → debe dar puntuación ALTA, lo que valida
-   también la detección positiva).
-3. **Poner el contacto**: constante `CONTACTO` en `index.html` (WhatsApp con el 1 delante).
-4. **Cobro**: enlaces de pago de Stripe en los botones de plan.
-5. Luego ya: los primeros 20 informes gratis (abajo).
+1. **Poner el contacto**: constante `CONTACTO` en `index.html` (WhatsApp con el 1 delante).
+   Sin esto, los botones de plan abren un correo de ejemplo y se pierde el cliente.
+2. **Cobro**: enlaces de pago de Stripe en los botones de plan.
+3. **Los primeros 20 informes gratis** (plan de 7 días, abajo). El producto ya funciona: esto
+   es lo único que separa el proyecto de su primer dólar.
 
 ## Primeros 7 días
 

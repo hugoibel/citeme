@@ -18,8 +18,8 @@ busca ese servicio en su ciudad — y enseña **por qué recomienda a otros**.
 La web ya apunta a él. Comprobar en cualquier momento:
 [`/health`](https://citeme-api.citemeai.workers.dev/health) → debe responder `{"ok":true,…}`.
 
-⏳ **Falta un paso manual**: pegar el secreto `GEMINI_KEY` (ver punto 3). Hasta entonces
-`/ask` responde `{"error":"falta configurar GEMINI_KEY"}`.
+✅ **Clave puesta y facturación activada**. Verificado de punta a punta el 2026-08-11 con un
+negocio real de Miami Beach: 4 preguntas, 3 citas detectadas, competidores y fuentes reales.
 
 ## 1. Volver a desplegar el backend (si lo cambias)
 
@@ -57,7 +57,7 @@ const BACKEND = localStorage.getItem('citeme_backend') || "https://citeme-api.ci
 > Para apuntar a otro backend sin tocar el código: abre la consola del navegador y ejecuta
 > `localStorage.setItem('citeme_backend','https://…workers.dev')`, recarga y listo.
 
-## 2. Poner la clave de Gemini (paso pendiente)
+## 2. Poner la clave de Gemini (ya hecho — aquí por si hay que rehacerlo)
 
 1. Consigue la clave en [aistudio.google.com/apikey](https://aistudio.google.com/apikey) → **Create API key**.
 2. [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages** → **citeme-api** →

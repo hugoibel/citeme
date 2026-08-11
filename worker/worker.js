@@ -116,27 +116,29 @@ async function llamarGemini(env, peticion, buscar, pedido) {
   }
   let ultimo = { error: 'sin modelos disponibles', status: 502, detalle: '' };
 
-  for (const m of orden.slice(0, 4)) {
+  for (const m of orden.slice(0, 5)) {
     let r;
     try {
       r = await fetch(API + '/models/' + m + ':generateContent?key=' + env.GEMINI_KEY, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(peticion)
       });
     } catch (e) {
-      ultimo = { error: 'no se pudo contactar con el modelo', status: 502, detalle: '' };
+      ultimo = { error: 'no se pudo contactar con el modelo', status: 502, detalle: '', modelo: m };
       continue;
     }
     if (r.ok) { if (!buscar && !pedido) MODELO_OK = m; return { datos: await r.json(), modelo: m }; }
 
     const detalle = (await r.text().catch(() => '')).slice(0, 300);
-    if (r.status === 429) return { error: 'quota exhausted', status: 429, detalle };
-    // 404 = ese modelo no sirve para esta cuenta → probar el siguiente
-    if (r.status === 404 || r.status === 400) {
-      if (MODELO_OK === m) MODELO_OK = null;
-      ultimo = { error: 'upstream ' + r.status, status: 502, detalle };
-      continue;
+
+    // Cuota agotada de verdad: cambiar de modelo no arregla nada.
+    if (r.status === 429 && /quota|billing/i.test(detalle)) {
+      return { error: 'quota exhausted', status: 429, detalle, modelo: m };
     }
-    return { error: 'upstream ' + r.status, status: 502, detalle };
+    // Lo demás son problemas DE ESE modelo (no existe, saturado, límite de
+    // ritmo, caído un momento): merece la pena probar el siguiente de la lista.
+    if (MODELO_OK === m) MODELO_OK = null;
+    ultimo = { error: 'upstream ' + r.status, status: 502, detalle, modelo: m };
+    if (r.status === 503 || r.status === 429) await new Promise(s => setTimeout(s, 400));
   }
   return ultimo;
 }
