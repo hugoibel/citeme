@@ -217,7 +217,12 @@ dialog p{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
    BACKEND: URL del Cloudflare Worker. Con esto puesto, la web funciona para
    cualquiera sin pedir clave. Vacío = modo privado (cada uno pone su clave). */
 const BACKEND  = localStorage.getItem('citeme_backend') || "https://citeme-api.citemeai.workers.dev";
-const CONTACTO = { whatsapp:"", email:"hello@citeme.app" };   // ← tu WhatsApp (1XXXXXXXXXX, sin + ni espacios) y tu correo
+/* El número va troceado a propósito: los robots que rastrean webs buscando
+   teléfonos leen el HTML tal cual, y así no encuentran nada que copiar. Para
+   el visitante es idéntico, porque se junta al pulsar el botón.
+   Ejemplo: (813) 555-1234 → ["1", "813", "555", "1234"] */
+const WA_PARTES = ["1", "352", "549", "0054"];
+const CONTACTO = { whatsapp: WA_PARTES.join(""), email:"hugoibel91@gmail.com" };
 const PRECIOS  = { informe:"$99", vigilancia:"$49" };
 /* Enlaces de pago de Stripe. Si están puestos, el botón lleva a pagar; si no,
    abre WhatsApp (o el correo) para hablar contigo primero. */
