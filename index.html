@@ -217,8 +217,11 @@ dialog p{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
    BACKEND: URL del Cloudflare Worker. Con esto puesto, la web funciona para
    cualquiera sin pedir clave. Vacío = modo privado (cada uno pone su clave). */
 const BACKEND  = localStorage.getItem('citeme_backend') || "https://citeme-api.citemeai.workers.dev";
-const CONTACTO = { whatsapp:"", email:"hello@citeme.app" };   // ← pon tu WhatsApp (1XXXXXXXXXX) y tu correo
+const CONTACTO = { whatsapp:"", email:"hello@citeme.app" };   // ← tu WhatsApp (1XXXXXXXXXX, sin + ni espacios) y tu correo
 const PRECIOS  = { informe:"$99", vigilancia:"$49" };
+/* Enlaces de pago de Stripe. Si están puestos, el botón lleva a pagar; si no,
+   abre WhatsApp (o el correo) para hablar contigo primero. */
+const PAGOS    = { informe:"", vigilancia:"" };
 /* ════════════════════════════════════ */
 
 const $ = s => document.querySelector(s);
@@ -528,16 +531,17 @@ function pintar(d){
     <div class="plan-c">
       <h4>${t('pl1')}</h4><div class="precio">${PRECIOS.informe}<small> ${t('pl1s')}</small></div>
       <ul>${t('pl1i').map(x=>`<li>${x}</li>`).join('')}</ul>
-      <button class="btn btn-ghost" data-plan="${t('pl1')} (${PRECIOS.informe})">${t('pl1b')}</button>
+      <button class="btn btn-ghost" data-cual="informe" data-plan="${t('pl1')} (${PRECIOS.informe})">${t('pl1b')}</button>
     </div>
     <div class="plan-c destacado">
       <span class="et">${t('pl2e')}</span>
       <h4>${t('pl2')}</h4><div class="precio">${PRECIOS.vigilancia}<small>${t('pl2s')}</small></div>
       <ul>${t('pl2i').map(x=>`<li>${x}</li>`).join('')}</ul>
-      <button class="btn btn-primary" data-plan="${t('pl2')} (${PRECIOS.vigilancia}${t('pl2s')})">${t('pl2b')}</button>
+      <button class="btn btn-primary" data-cual="vigilancia" data-plan="${t('pl2')} (${PRECIOS.vigilancia}${t('pl2s')})">${t('pl2b')}</button>
     </div>
   </div>`;
-  $('#result').querySelectorAll('[data-plan]').forEach(b => b.onclick = ()=>contratar(b.dataset.plan, neg));
+  $('#result').querySelectorAll('[data-plan]').forEach(b =>
+    b.onclick = () => contratar(b.dataset.plan, neg, b.dataset.cual));
   $('#result').style.display='block';
   $('#result').scrollIntoView({behavior:'smooth', block:'start'});
 }
@@ -554,7 +558,17 @@ function construirPlan(d){
   return p;
 }
 
-function contratar(plan, neg){
+function contratar(plan, neg, cual){
+  // 1) Si hay enlace de pago, cobrar directamente (y arrastrar los datos del
+  //    negocio para saber después de quién es cada compra).
+  const pago = PAGOS[cual];
+  if (pago) {
+    const sep = pago.includes('?') ? '&' : '?';
+    const ref = encodeURIComponent(neg.nombre + ' · ' + neg.ciudad);
+    window.open(pago + sep + 'client_reference_id=' + ref, '_blank', 'noopener');
+    return;
+  }
+  // 2) Si no, abrir conversación con el mensaje ya escrito.
   const txt = t('msg')(neg.nombre, neg.ciudad, plan);
   const url = CONTACTO.whatsapp
     ? `https://wa.me/${CONTACTO.whatsapp}?text=${encodeURIComponent(txt)}`

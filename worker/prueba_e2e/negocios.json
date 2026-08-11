@@ -1,0 +1,25 @@
+[
+  { "nombre": "Agoka Dental",                    "ciudad": "Tampa, FL",          "actividad": "cosmetic dentist / smile makeover", "sector": "Dentistas" },
+  { "nombre": "Tampa Dental Wellness",           "ciudad": "Tampa, FL",          "actividad": "dental clinic / cosmetic dentistry", "sector": "Dentistas" },
+  { "nombre": "Eden Dental Aesthetics",          "ciudad": "Tampa, FL",          "actividad": "cosmetic dentist / veneers",        "sector": "Dentistas" },
+  { "nombre": "South Tampa Dentistry",           "ciudad": "Tampa, FL",          "actividad": "family and cosmetic dentist",       "sector": "Dentistas" },
+  { "nombre": "Bay Premier Dentistry",           "ciudad": "Tampa, FL",          "actividad": "dental implants / general dentistry", "sector": "Dentistas" },
+
+  { "nombre": "Catania and Catania Injury Lawyers", "ciudad": "Tampa, FL",       "actividad": "personal injury lawyer / car accident attorney", "sector": "Abogados" },
+  { "nombre": "Jones Law Group",                 "ciudad": "St. Petersburg, FL", "actividad": "personal injury lawyer",            "sector": "Abogados" },
+  { "nombre": "Pipas Law Group",                 "ciudad": "St. Petersburg, FL", "actividad": "personal injury attorney",          "sector": "Abogados" },
+  { "nombre": "McQuaid & Douglas",               "ciudad": "St. Petersburg, FL", "actividad": "personal injury attorney",          "sector": "Abogados" },
+  { "nombre": "The Yerrid Law Firm",             "ciudad": "Tampa, FL",          "actividad": "personal injury trial lawyer",      "sector": "Abogados" },
+
+  { "nombre": "Beach Park Animal Clinic",        "ciudad": "Tampa, FL",          "actividad": "veterinarian / animal hospital",    "sector": "Veterinarios" },
+  { "nombre": "Bayshore Animal Clinic",          "ciudad": "Tampa, FL",          "actividad": "veterinarian / animal hospital",    "sector": "Veterinarios" },
+  { "nombre": "Keene Veterinary Hospital",       "ciudad": "Tampa, FL",          "actividad": "veterinarian / animal hospital",    "sector": "Veterinarios" },
+  { "nombre": "Westshore Animal Hospital",       "ciudad": "Tampa, FL",          "actividad": "veterinarian / emergency vet",      "sector": "Veterinarios" },
+  { "nombre": "Gregory Veterinary Clinic",       "ciudad": "Tampa, FL",          "actividad": "veterinarian / animal clinic",      "sector": "Veterinarios" },
+
+  { "nombre": "Caldeco Air Conditioning & Heating", "ciudad": "Tampa, FL",       "actividad": "air conditioning repair / HVAC",    "sector": "Aire y techos" },
+  { "nombre": "Northside Services",              "ciudad": "Tampa, FL",          "actividad": "air conditioning repair / HVAC",    "sector": "Aire y techos" },
+  { "nombre": "Weathermakers Air Conditioning & Heating", "ciudad": "Tampa, FL", "actividad": "air conditioning repair / HVAC",    "sector": "Aire y techos" },
+  { "nombre": "Blue Maple Leaf",                 "ciudad": "St. Petersburg, FL", "actividad": "HVAC and roofing contractor",       "sector": "Aire y techos" },
+  { "nombre": "Protek Roofing, Heating, Air & Solar", "ciudad": "Tampa, FL",     "actividad": "roofing contractor / roof repair",  "sector": "Aire y techos" }
+]
