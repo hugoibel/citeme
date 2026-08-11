@@ -1,0 +1,189 @@
+[
+  {
+    "sector": "Dentistas",
+    "negocio": "South Tampa Dentistry",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 39,
+    "citado": 4,
+    "total": 4,
+    "rival": "General and Cosmetic Dentistry of Tampa",
+    "fuentes": "tampadentalcare.com · yoursouthtampadentist.com · muscaroandmartinidentistry.com",
+    "archivo": "03-south-tampa-dentistry.html"
+  },
+  {
+    "sector": "Dentistas",
+    "negocio": "Bay Premier Dentistry",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Tampa Dental Implants / Dr. Keenan Osman",
+    "fuentes": "dental-implants-tampa-fl.com · westchasesmilesinstitute.com · moderndaysmiles.com",
+    "archivo": "04-bay-premier-dentistry.html"
+  },
+  {
+    "sector": "Abogados",
+    "negocio": "Catania and Catania Injury Lawyers",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Swope, Rodante P.A.",
+    "fuentes": "tampatriallawyers.com · theinjurylawyers.com · swoperodante.com",
+    "archivo": "05-catania-and-catania-injury-lawyers.html"
+  },
+  {
+    "sector": "Abogados",
+    "negocio": "Jones Law Group",
+    "ciudad": "St. Petersburg, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Salter, Healy, Rivera &amp; Heptner",
+    "fuentes": "justincjohnsonlaw.com · salterhealy.com · getjustice.com",
+    "archivo": "06-jones-law-group.html"
+  },
+  {
+    "sector": "Abogados",
+    "negocio": "Pipas Law Group",
+    "ciudad": "St. Petersburg, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Salter, Healy, Rivera &amp; Heptner",
+    "fuentes": "salterhealy.com · justincjohnsonlaw.com · mathiaslawfirm.com",
+    "archivo": "07-pipas-law-group.html"
+  },
+  {
+    "sector": "Abogados",
+    "negocio": "McQuaid & Douglas",
+    "ciudad": "St. Petersburg, FL",
+    "puntuacion": 29,
+    "citado": 2,
+    "total": 4,
+    "rival": "Battaglia, Ross, Dicus &amp; McQuaid, P.A.",
+    "fuentes": "salterhealy.com · stpetelawgroup.com · flinjurylawattorney.com",
+    "archivo": "08-mcquaid-douglas.html"
+  },
+  {
+    "sector": "Abogados",
+    "negocio": "The Yerrid Law Firm",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 65,
+    "citado": 3,
+    "total": 4,
+    "rival": "Swope, Rodante P.A.",
+    "fuentes": "fightnegligence.com · swoperodante.com · yerridlaw.com",
+    "archivo": "09-the-yerrid-law-firm.html"
+  },
+  {
+    "sector": "Veterinarios",
+    "negocio": "Beach Park Animal Clinic",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "The Heights Veterinary Clinic",
+    "fuentes": "theheightsveterinaryclinic.com · bayshoreanimalclinic.com · humanesocietytampabay.org",
+    "archivo": "10-beach-park-animal-clinic.html"
+  },
+  {
+    "sector": "Veterinarios",
+    "negocio": "Bayshore Animal Clinic",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Harmony Vet Care",
+    "fuentes": "humanesocietytampabay.org · harmonyvetcare.org · veg.com",
+    "archivo": "11-bayshore-animal-clinic.html"
+  },
+  {
+    "sector": "Veterinarios",
+    "negocio": "Keene Veterinary Hospital",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Veterinary Emergency Group (VEG)",
+    "fuentes": "veg.com · humanesocietytampabay.org · harmonyvetcare.org",
+    "archivo": "12-keene-veterinary-hospital.html"
+  },
+  {
+    "sector": "Veterinarios",
+    "negocio": "Westshore Animal Hospital",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 9,
+    "citado": 1,
+    "total": 4,
+    "rival": "BluePearl Pet Hospital",
+    "fuentes": "bluepearlvet.com · humanesocietytampabay.org · veg.com",
+    "archivo": "13-westshore-animal-hospital.html"
+  },
+  {
+    "sector": "Veterinarios",
+    "negocio": "Gregory Veterinary Clinic",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Westshore Animal Hospital",
+    "fuentes": "bluepearlvet.com · humanesocietytampabay.org · epicvetcare.com",
+    "archivo": "14-gregory-veterinary-clinic.html"
+  },
+  {
+    "sector": "Aire y techos",
+    "negocio": "Caldeco Air Conditioning & Heating",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 59,
+    "citado": 4,
+    "total": 4,
+    "rival": "Cool Today",
+    "fuentes": "airmasters.net · reddit.com · acshomeservices.com",
+    "archivo": "15-caldeco-air-conditioning-heating.html"
+  },
+  {
+    "sector": "Aire y techos",
+    "negocio": "Northside Services",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Air Masters of Tampa Bay",
+    "fuentes": "airmasters.net · cooltoday.com · bluepeak-ac.com",
+    "archivo": "16-northside-services.html"
+  },
+  {
+    "sector": "Aire y techos",
+    "negocio": "Weathermakers Air Conditioning & Heating",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 66,
+    "citado": 4,
+    "total": 4,
+    "rival": "Air Masters of Tampa Bay",
+    "fuentes": "airmasters.net · acshomeservices.com · cooltoday.com",
+    "archivo": "17-weathermakers-air-conditioning-heating.html"
+  },
+  {
+    "sector": "Aire y techos",
+    "negocio": "Blue Maple Leaf",
+    "ciudad": "St. Petersburg, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Protek Roofing, Heating, Air &amp; Solar",
+    "fuentes": "reddit.com · protekps.com · ourroofbear.com",
+    "archivo": "18-blue-maple-leaf.html"
+  },
+  {
+    "sector": "Aire y techos",
+    "negocio": "Protek Roofing, Heating, Air & Solar",
+    "ciudad": "Tampa, FL",
+    "puntuacion": 0,
+    "citado": 0,
+    "total": 4,
+    "rival": "Westfall Roofing",
+    "fuentes": "doneriteroofinginc.com · roofpitch.net · integrityroofingofflorida.com",
+    "archivo": "19-protek-roofing-heating-air-solar.html"
+  }
+]

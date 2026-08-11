@@ -71,11 +71,14 @@ function analizar(indice) {
     const archivo = path.join(SALIDA, String(i).padStart(2, '0') + '-' + slug(n.nombre) + '.html');
     fs.writeFileSync(archivo, limpio, 'utf8');
 
-    const mScore = dom.match(/<div class="val"><b>(\d+)<\/b>/);
-    const citas = (dom.match(/class="pill p-si"/g) || []).length;
-    const noCitas = (dom.match(/class="pill p-no"/g) || []).length;
-    const rivales = [...dom.matchAll(/<span class="nm">([^<]+)<\/span>/g)].map(m => m[1]);
-    const fuentes = [...dom.matchAll(/<span class="src">([^<]+)<b>/g)].map(m => m[1].trim());
+    // Se cuenta sobre el HTML SIN scripts: el código lleva las plantillas de
+    // esas mismas etiquetas y falsearían el recuento.
+    const mScore = limpio.match(/<div class="val"><b>(\d+)<\/b>/);
+    const citas = (limpio.match(/class="pill p-si"/g) || []).length;
+    const noCitas = (limpio.match(/class="pill p-no"/g) || []).length;
+    const rivales = [...limpio.matchAll(/<span class="nm">([^<]+)<\/span>/g)].map(m => m[1]);
+    const fuentes = [...limpio.matchAll(/<span class="src">([^<]+)<b>/g)].map(m => m[1].trim());
+    const cortado = /daily limit reached/.test(dom);
 
     const fila = {
       sector: n.sector, negocio: n.nombre, ciudad: n.ciudad,
@@ -85,7 +88,10 @@ function analizar(indice) {
       archivo: path.basename(archivo)
     };
     resumen.push(fila);
-    console.log(fila.puntuacion === null ? 'SIN INFORME' : fila.puntuacion + '/100 (' + citas + ' de ' + (citas + noCitas) + ')');
+    console.log(fila.puntuacion === null
+      ? (cortado ? 'CORTADO POR EL TOPE DIARIO' : 'SIN INFORME')
+      : fila.puntuacion + '/100 (' + citas + ' de ' + (citas + noCitas) + ')');
+    if (cortado) { console.log('  ↳ se acabó la cuota del día: el resto no se intenta.'); break; }
     fs.writeFileSync(path.join(SALIDA, 'resumen.json'), JSON.stringify(resumen, null, 2), 'utf8');
   }
 
