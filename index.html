@@ -46,9 +46,12 @@ header.top{padding:22px 0;display:flex;align-items:center;justify-content:space-
 .hero{padding:38px 0 10px;max-width:770px}
 .kicker{display:inline-flex;align-items:center;gap:8px;background:var(--brand-soft);color:var(--brand);
   font-weight:650;font-size:13px;padding:6px 12px;border-radius:999px;margin-bottom:18px}
-h1{font-size:clamp(30px,5.2vw,50px);line-height:1.06;letter-spacing:-.035em;margin:0 0 16px;font-weight:800}
-h1 em{font-style:normal;background:linear-gradient(180deg,transparent 62%,rgba(27,92,255,.22) 62%);
-  -webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .06em}
+h1{font-size:clamp(30px,5.2vw,50px);line-height:1.14;letter-spacing:-.035em;margin:0 0 16px;font-weight:800}
+/* Antes era un "rotulador" (fondo degradado desde el 62% de la caja de linea).
+   Dos problemas: con line-height 1.06 cortaba las letras por la mitad, y en modo
+   oscuro --brand-soft casi coincide con el fondo, asi que se veia como un borron.
+   Resaltar por COLOR no tiene ninguno de los dos fallos y funciona en ambos temas. */
+h1 em{font-style:normal;color:var(--brand)}
 .sub{font-size:clamp(16px,2.2vw,19px);color:var(--ink-soft);margin:0;max-width:62ch}
 .stats{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 6px}
 .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;flex:1 1 210px}
@@ -133,12 +136,35 @@ dialog::backdrop{background:rgba(6,10,18,.55);backdrop-filter:blur(3px)}
 dialog h3{margin:0 0 4px;font-size:19px;letter-spacing:-.02em}
 dialog p{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
 .err{background:var(--bad-soft);color:var(--bad);border-radius:11px;padding:12px 14px;font-size:14px;margin-top:14px;display:none}
+/* Cabecera y pie que SOLO salen en el PDF: sin esto el informe que el cliente
+   guarda (y reenvia) no dice de donde viene ni como contactar. */
+.solopdf{display:none}
 @media print{
-  body{background:#fff;color:#000}
+  /* El informe se imprime sobre papel BLANCO y los navegadores NO imprimen los
+     fondos por defecto. Sin devolver la paleta CLARA aqui, los 55 textos del
+     informe (competidores, "No apareces", cabeceras) salian casi invisibles:
+     contraste de 1.9:1 cuando lo legible empieza en 4.5:1. */
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --ink:#0f1729; --ink-soft:#44506a; --line:#c9cfdb;
+    --brand:#0b3ea8; --brand-soft:#eaf0ff; --ok:#076b43; --ok-soft:#e6f6ef;
+    --warn:#8a5a00; --warn-soft:#fdf3e0; --bad:#a81b32; --bad-soft:#fdecef;
+    --shadow:none;
+  }
+  body{background:#fff;color:var(--ink)}
   header.top,.hero,.form,#progress,.cta,.planes,footer,.noprint{display:none!important}
-  #result{display:block!important}
-  .card{box-shadow:none;border:1px solid #ddd}
+  #result{display:block!important;margin:0}
+  .card{box-shadow:none;border:1px solid var(--line);background:#fff;padding:0}
   section.block{break-inside:avoid}
+  table{min-width:0}
+  /* las chapas de color si merecen tinta: son el veredicto de un vistazo */
+  .pill,.tag,.rank .n,.src,ol.plan li::before{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  a{color:var(--ink)}
+  .solopdf{display:block}
+  .pcab{border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:18px}
+  .pcab b{font-size:20px;letter-spacing:-.02em;margin-right:10px}
+  .pcab span{font-size:12.5px;color:var(--ink-soft)}
+  .ppie{border-top:1px solid var(--line);margin-top:18px;padding-top:8px;
+        font-size:11.5px;color:var(--ink-soft);text-align:center}
 }
 </style>
 </head>
@@ -279,6 +305,7 @@ en:{
   ctaT:"This changes every month",
   ctaP:"AI answers get rewritten constantly: today you're out, tomorrow you could be first — or the other way around. Monthly tracking tells you when you enter, when you drop and which competitor passed you.",
   bPdf:"Download this report as PDF", bOtro:"Check another business",
+  pCab:"AI visibility report", pPie:"Report by CiteMe · live AI visibility check for local businesses",
   pl1:"Full report", pl1s:"one-time", pl1i:["15 real customer questions","Head-to-head with your competitors","The sources AI reads in your industry","Written action plan"], pl1b:"I want it",
   pl2:"Monthly tracking", pl2s:"/month", pl2i:["Everything in the report, every month","Alert when you appear or vanish","Alert when a competitor passes you","No contract"], pl2b:"Start", pl2e:"Most popular",
   msg:(n,c,p)=>`Hi, I ran the AI check for "${n}" (${c}) and I'd like: ${p}.`,
@@ -332,6 +359,7 @@ es:{
   ctaT:"Esto cambia cada mes",
   ctaP:"Las respuestas de la IA se reescriben constantemente: hoy no sales, mañana puedes salir el primero — o al revés. La vigilancia mensual te avisa cuando entras, cuando caes y qué competidor te ha adelantado.",
   bPdf:"Descargar este informe en PDF", bOtro:"Analizar otro negocio",
+  pCab:"Informe de visibilidad en IA", pPie:"Informe de CiteMe · visibilidad de negocios locales en la IA, medida en vivo",
   pl1:"Informe completo", pl1s:"pago único", pl1i:["15 preguntas reales de cliente","Comparativa con tus competidores","Las fuentes que lee la IA en tu sector","Plan de acción por escrito"], pl1b:"Lo quiero",
   pl2:"Vigilancia mensual", pl2s:"/mes", pl2i:["Todo lo del informe, cada mes","Aviso cuando entras o desapareces","Aviso si un competidor te adelanta","Sin permanencia"], pl2b:"Empezar", pl2e:"Recomendado",
   msg:(n,c,p)=>`Hola, he hecho el análisis de "${n}" (${c}) y quiero contratar: ${p}.`,
@@ -491,7 +519,14 @@ function pintar(d){
   const baj = pct<25 ? t('subBad')(filas.length,citas,neg.actividad,neg.ciudad)
             : pct<60 ? t('subWarn')(filas.length,citas) : t('subOk')(filas.length,citas);
 
+  const fechaInf = new Date().toLocaleDateString(CFG.lang==='es'?'es-ES':'en-US',
+                     {day:'numeric',month:'long',year:'numeric'});
+
   $('#result').innerHTML = `
+  <div class="solopdf pcab">
+    <b>CiteMe</b>
+    <span>${t('pCab')} &middot; ${esc(neg.nombre)} &middot; ${esc(neg.ciudad)} &middot; ${fechaInf}</span>
+  </div>
   <div class="card">
     <div class="score-head">
       <div class="gauge">
@@ -525,6 +560,8 @@ function pintar(d){
     <section class="block"><h3>${t('s4')}</h3>
       <ol class="plan">${construirPlan(d).map(p=>`<li><b>${esc(p.t)}</b><span>${esc(p.d)}</span></li>`).join('')}</ol></section>
   </div>
+
+  <div class="solopdf ppie">${t('pPie')} &middot; hugoibel.github.io/citeme &middot; ${CONTACTO.email}</div>
 
   <div class="cta noprint">
     <h3>${t('ctaT')}</h3><p>${t('ctaP')}</p>
@@ -569,7 +606,14 @@ function contratar(plan, neg, cual){
   const pago = PAGOS[cual];
   if (pago) {
     const sep = pago.includes('?') ? '&' : '?';
-    const ref = encodeURIComponent(neg.nombre + ' · ' + neg.ciudad);
+    /* Stripe SOLO admite letras, numeros, guiones y guiones bajos aqui (max 200),
+       y los valores invalidos los DESCARTA EN SILENCIO: el cobro entraria bien
+       pero sin saber de que negocio es. Por eso se limpia antes de mandarlo. */
+    const ref = (neg.nombre + '-' + neg.ciudad)
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 200);
     window.open(pago + sep + 'client_reference_id=' + ref, '_blank', 'noopener');
     return;
   }
