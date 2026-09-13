@@ -129,7 +129,16 @@ ol.plan span{color:var(--ink-soft);font-size:14.5px}
 .plan-c li{padding:4px 0 4px 22px;position:relative}
 .plan-c li::before{content:'✓';position:absolute;left:0;color:var(--ok);font-weight:800}
 .plan-c .btn{width:100%}
+.garantia{display:flex;align-items:center;gap:14px;margin-top:14px;padding:14px 18px;text-decoration:none;
+  background:var(--ok-soft);border:1px solid var(--ok);border-radius:var(--radius);color:var(--ink)}
+.garantia:hover{box-shadow:var(--shadow)}
+.garantia .escudo{width:30px;height:30px;flex:0 0 auto;border-radius:50%;background:var(--ok);color:#fff;
+  display:grid;place-items:center;font-weight:800;font-size:16px}
+.garantia b{display:block;font-size:15px;letter-spacing:-.01em}
+.garantia i{display:block;font-style:normal;font-size:13.5px;color:var(--ink-soft);margin-top:1px}
 footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--ink-soft);font-size:13.5px}
+footer a{color:var(--ink-soft)}
+footer a:hover{color:var(--brand)}
 dialog{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);color:var(--ink);
   padding:24px;max-width:520px;width:calc(100% - 32px);box-shadow:var(--shadow)}
 dialog::backdrop{background:rgba(6,10,18,.55);backdrop-filter:blur(3px)}
@@ -218,6 +227,7 @@ dialog p{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
 
   <footer>
     <b>CiteMe</b> — <span data-t="footer"></span>
+    <span style="display:block;margin-top:6px"><a href="legal.html" data-t="legal"></a></span>
   </footer>
 </div>
 
@@ -307,6 +317,8 @@ en:{
   bPdf:"Download this report as PDF", bOtro:"Check another business",
   pCab:"AI visibility report", pPie:"Report by CiteMe · live AI visibility check for local businesses",
   pl1:"Full report", pl1s:"one-time", pl1i:["15 real customer questions","Head-to-head with your competitors","The sources AI reads in your industry","Written action plan"], pl1b:"I want it",
+  gar:"30-day money-back guarantee", garSub:"If it is not useful, email me and I refund it. No questions.",
+  legal:"Terms, privacy and refunds",
   pl2:"Monthly tracking", pl2s:"/month", pl2i:["Everything in the report, every month","Alert when you appear or vanish","Alert when a competitor passes you","No contract"], pl2b:"Start", pl2e:"Most popular",
   msg:(n,c,p)=>`Hi, I ran the AI check for "${n}" (${c}) and I'd like: ${p}.`,
   footer:"AI visibility for local businesses. Everything is checked live; nothing is stored on a server.",
@@ -361,6 +373,8 @@ es:{
   bPdf:"Descargar este informe en PDF", bOtro:"Analizar otro negocio",
   pCab:"Informe de visibilidad en IA", pPie:"Informe de CiteMe · visibilidad de negocios locales en la IA, medida en vivo",
   pl1:"Informe completo", pl1s:"pago único", pl1i:["15 preguntas reales de cliente","Comparativa con tus competidores","Las fuentes que lee la IA en tu sector","Plan de acción por escrito"], pl1b:"Lo quiero",
+  gar:"Garantía de devolución de 30 días", garSub:"Si no te sirve, me escribes y te lo devuelvo. Sin preguntas.",
+  legal:"Términos, privacidad y devoluciones",
   pl2:"Vigilancia mensual", pl2s:"/mes", pl2i:["Todo lo del informe, cada mes","Aviso cuando entras o desapareces","Aviso si un competidor te adelanta","Sin permanencia"], pl2b:"Empezar", pl2e:"Recomendado",
   msg:(n,c,p)=>`Hola, he hecho el análisis de "${n}" (${c}) y quiero contratar: ${p}.`,
   footer:"visibilidad de negocios locales en la IA. Todo se consulta en vivo y no se guarda en ningún servidor.",
@@ -581,7 +595,12 @@ function pintar(d){
       <ul>${t('pl2i').map(x=>`<li>${x}</li>`).join('')}</ul>
       <button class="btn btn-primary" data-cual="vigilancia" data-plan="${t('pl2')} (${PRECIOS.vigilancia}${t('pl2s')})">${t('pl2b')}</button>
     </div>
-  </div>`;
+  </div>
+
+  <a class="garantia noprint" href="legal.html#devoluciones">
+    <span class="escudo">✓</span>
+    <span><b>${t('gar')}</b><i>${t('garSub')}</i></span>
+  </a>`;
   $('#result').querySelectorAll('[data-plan]').forEach(b =>
     b.onclick = () => contratar(b.dataset.plan, neg, b.dataset.cual));
   $('#result').style.display='block';

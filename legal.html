@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CiteMe · Términos, privacidad y devoluciones</title>
+<meta name="robots" content="index,follow">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#0f1729; --ink-soft:#5a6478; --line:#e4e7ee;
+  --brand:#1b5cff; --radius:16px;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 12px 32px -12px rgba(16,24,40,.14);
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0b0f17;--panel:#131a26;--ink:#eef2f8;--ink-soft:#99a4b8;--line:#243044;
+  --brand:#5b8cff;--shadow:0 1px 2px rgba(0,0,0,.4),0 16px 40px -16px rgba(0,0,0,.7);}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px}
+header.top{border-bottom:1px solid var(--line);padding:18px 0;margin-bottom:36px}
+header.top .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:800;font-size:19px;letter-spacing:-.02em}
+.logo i{width:30px;height:30px;border-radius:9px;background:var(--brand);display:grid;place-items:center;
+  color:#fff;font-style:normal;font-weight:800;font-size:15px}
+.sp{flex:1}
+.btn{display:inline-block;border:1px solid var(--line);background:var(--panel);color:var(--ink);
+  border-radius:10px;padding:8px 14px;font:inherit;font-size:14px;font-weight:650;cursor:pointer;text-decoration:none}
+.btn:hover{border-color:var(--brand)}
+.langs{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.langs button{border:0;background:var(--panel);color:var(--ink-soft);font:inherit;font-size:13px;
+  font-weight:700;padding:8px 12px;cursor:pointer}
+.langs button.on{background:var(--brand);color:#fff}
+h1{font-size:clamp(26px,4.5vw,38px);letter-spacing:-.03em;line-height:1.15;margin:0 0 8px;font-weight:800}
+.lead{color:var(--ink-soft);margin:0 0 10px}
+.upd{font-size:13.5px;color:var(--ink-soft);margin:0 0 28px}
+.toc{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;margin:0 0 34px}
+.toc ol{margin:0;padding-left:20px}
+.toc a{color:var(--brand);text-decoration:none}
+.toc a:hover{text-decoration:underline}
+section.doc{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:26px 28px;margin:0 0 22px;scroll-margin-top:20px}
+section.doc h2{font-size:22px;letter-spacing:-.025em;margin:0 0 4px}
+section.doc h3{font-size:16px;margin:24px 0 6px;letter-spacing:-.01em}
+section.doc p,section.doc li{color:var(--ink-soft)}
+section.doc p{margin:0 0 12px}
+section.doc ul{margin:0 0 12px;padding-left:22px}
+section.doc li{margin:4px 0}
+section.doc strong{color:var(--ink)}
+.aviso{border-left:3px solid var(--brand);background:var(--bg);border-radius:0 10px 10px 0;padding:12px 16px;margin:18px 0}
+.aviso p{margin:0;font-size:14.5px}
+.falta{border-left:3px solid #c98200;background:var(--bg);border-radius:0 10px 10px 0;padding:12px 16px;margin:18px 0}
+.falta p{margin:0;font-size:14.5px}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:6px 0 14px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);
+  padding:0 10px 8px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-soft)}
+tr:last-child td{border-bottom:0}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 60px;color:var(--ink-soft);font-size:13.5px}
+footer a{color:var(--brand)}
+[data-lang]{display:none}
+html[lang="es"] [data-lang="es"],html[lang="en"] [data-lang="en"]{display:revert}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="logo" href="./"><i>C</i>CiteMe</a>
+  <span class="sp"></span>
+  <div class="langs">
+    <button id="bEs" onclick="setLang('es')">ES</button>
+    <button id="bEn" onclick="setLang('en')">EN</button>
+  </div>
+  <a class="btn" href="./" data-lang="es">← Volver</a>
+  <a class="btn" href="./" data-lang="en">← Back</a>
+</div></header>
+
+<main class="wrap">
+
+  <div data-lang="es">
+    <h1>Términos, privacidad y devoluciones</h1>
+    <p class="lead">En claro y sin letra pequeña. Si algo no se entiende, escríbeme y te lo explico.</p>
+    <p class="upd">Última actualización: 13 de septiembre de 2026</p>
+    <nav class="toc"><ol>
+      <li><a href="#devoluciones">Garantía de devolución</a></li>
+      <li><a href="#terminos">Términos del servicio</a></li>
+      <li><a href="#privacidad">Privacidad</a></li>
+    </ol></nav>
+  </div>
+
+  <div data-lang="en">
+    <h1>Terms, privacy and refunds</h1>
+    <p class="lead">Plain language, no fine print. If anything is unclear, email me and I'll explain it.</p>
+    <p class="upd">Last updated: September 13, 2026</p>
+    <nav class="toc"><ol>
+      <li><a href="#devoluciones">Refund guarantee</a></li>
+      <li><a href="#terminos">Terms of service</a></li>
+      <li><a href="#privacidad">Privacy</a></li>
+    </ol></nav>
+  </div>
+
+  <!-- ══════════ DEVOLUCIONES ══════════ -->
+  <section class="doc" id="devoluciones">
+    <div data-lang="es">
+      <h2>1. Garantía de devolución de 30 días</h2>
+      <p><strong>Si el informe no te sirve, te devuelvo el dinero. Sin preguntas.</strong></p>
+      <p>Tienes <strong>30 días</strong> desde la compra para pedirlo. Escribe a
+      <a href="mailto:hugoibel91@gmail.com">hugoibel91@gmail.com</a> con el nombre de tu negocio y
+      devuelvo el importe íntegro por el mismo medio con el que pagaste.</p>
+      <p>No tienes que justificar nada ni devolver el informe: quédatelo.</p>
+      <h3>Vigilancia mensual ($49/mes)</h3>
+      <ul>
+        <li><strong>Cancelas cuando quieras</strong>, sin permanencia ni penalización.</li>
+        <li>Al cancelar, el servicio sigue activo hasta el final del mes que ya has pagado.</li>
+        <li>El primer mes también entra en la garantía de 30 días.</li>
+        <li>No se cobran meses ya disfrutados, pero tampoco se prorratean meses empezados.</li>
+      </ul>
+      <div class="aviso"><p>Los reembolsos suelen tardar de 5 a 10 días hábiles en aparecer en tu
+      cuenta, según tu banco. El pago lo procesa Stripe; yo no llego a ver tu número de tarjeta.</p></div>
+    </div>
+    <div data-lang="en">
+      <h2>1. 30-day money-back guarantee</h2>
+      <p><strong>If the report isn't useful to you, I refund your money. No questions asked.</strong></p>
+      <p>You have <strong>30 days</strong> from purchase to ask. Email
+      <a href="mailto:hugoibel91@gmail.com">hugoibel91@gmail.com</a> with your business name and I'll
+      refund the full amount to your original payment method.</p>
+      <p>You don't need to justify anything, and you keep the report.</p>
+      <h3>Monthly monitoring ($49/month)</h3>
+      <ul>
+        <li><strong>Cancel any time</strong> — no contract, no cancellation fee.</li>
+        <li>On cancellation the service stays active until the end of the month you already paid for.</li>
+        <li>The first month is also covered by the 30-day guarantee.</li>
+        <li>Months already used are not refunded, and partial months are not prorated.</li>
+      </ul>
+      <div class="aviso"><p>Refunds usually take 5-10 business days to appear, depending on your bank.
+      Payments are processed by Stripe; I never see your card number.</p></div>
+    </div>
+  </section>
+
+  <!-- ══════════ TÉRMINOS ══════════ -->
+  <section class="doc" id="terminos">
+    <div data-lang="es">
+      <h2>2. Términos del servicio</h2>
+
+      <h3>Qué es CiteMe</h3>
+      <p>CiteMe comprueba si los asistentes de inteligencia artificial mencionan tu negocio cuando
+      alguien pregunta por tu servicio en tu ciudad, te enseña a quién recomiendan en tu lugar y qué
+      páginas web usan como fuente, y te da un plan de acción.</p>
+
+      <h3>Qué NO es</h3>
+      <p>Esto es lo más importante de toda la página, así que va sin rodeos:</p>
+      <ul>
+        <li><strong>No te garantizo que vayas a aparecer</strong> en las respuestas de ninguna IA.
+        Nadie puede garantizarlo: los modelos deciden por su cuenta y cambian sus respuestas
+        continuamente.</li>
+        <li><strong>No soy ni represento a</strong> OpenAI, Google, Perplexity, Yelp ni ninguna de las
+        plataformas que se mencionan en el informe.</li>
+        <li><strong>No hago el trabajo por ti.</strong> El informe te dice qué hacer; ejecutarlo es
+        cosa tuya o de quien tú decidas.</li>
+        <li><strong>El informe es una foto de un momento.</strong> La misma pregunta puede dar otra
+        respuesta al día siguiente. De hecho, ese es justamente el motivo de que exista la
+        vigilancia mensual.</li>
+      </ul>
+
+      <h3>Qué recibes</h3>
+      <table>
+        <tr><th>Plan</th><th>Precio</th><th>Qué incluye</th></tr>
+        <tr><td><strong>Análisis gratuito</strong></td><td>$0</td>
+            <td>4 preguntas, en vivo, sin registrarte. Sujeto a un límite diario por visitante.</td></tr>
+        <tr><td><strong>Informe completo</strong></td><td>$99, pago único</td>
+            <td>15 preguntas reales de cliente, comparativa con competidores, fuentes que lee la IA
+            en tu sector y plan de acción por escrito.</td></tr>
+        <tr><td><strong>Vigilancia mensual</strong></td><td>$49/mes</td>
+            <td>Todo lo del informe, repetido cada mes, con aviso cuando entras, cuando desapareces
+            y cuando un competidor te adelanta.</td></tr>
+      </table>
+
+      <h3>Uso aceptable</h3>
+      <ul>
+        <li>El análisis gratuito tiene un tope de consultas por visitante y día, para que el servicio
+        siga abierto para todos.</li>
+        <li>No intentes saltarte ese límite de forma automatizada, ni usar el servicio para analizar
+        negocios en masa sin haberlo acordado conmigo antes.</li>
+        <li>El informe es para ti y tu negocio. Puedes enseñárselo a quien quieras, pero no revenderlo
+        como si fuera un producto propio.</li>
+      </ul>
+
+      <h3>Límite de responsabilidad</h3>
+      <p>El servicio se presta <strong>tal cual</strong>. Pongo cuidado en que los datos sean
+      correctos, pero dependen de lo que contesten modelos de terceros que no controlo, así que no
+      puedo garantizar que estén libres de errores ni que estén completos.</p>
+      <p>En caso de reclamación, <strong>mi responsabilidad se limita al importe que me hayas
+      pagado</strong> en los 12 meses anteriores. No respondo de lucro cesante ni de daños
+      indirectos. Nada de esto limita los derechos que la ley te reconozca de forma imperativa.</p>
+
+      <h3>Cambios</h3>
+      <p>Puedo actualizar estos términos. La fecha de arriba dice cuándo fue la última vez. Si el
+      cambio es relevante y eres cliente de la vigilancia mensual, te aviso por correo antes.</p>
+
+      <h3>Ley aplicable</h3>
+      <p>Estos términos se rigen por las leyes del Estado de Florida, Estados Unidos.</p>
+
+      <div class="falta"><p><strong>⚠️ Pendiente de completar por el titular:</strong> nombre legal o
+      razón social, dirección postal y, si aplica, número de registro mercantil o EIN. Stripe los va
+      a pedir para activar los cobros y deben aparecer aquí.</p></div>
+    </div>
+
+    <div data-lang="en">
+      <h2>2. Terms of service</h2>
+
+      <h3>What CiteMe is</h3>
+      <p>CiteMe checks whether AI assistants mention your business when someone asks about your
+      service in your city, shows you who they recommend instead and which websites they use as
+      sources, and gives you an action plan.</p>
+
+      <h3>What it is NOT</h3>
+      <p>This is the most important part of this page, so no hedging:</p>
+      <ul>
+        <li><strong>I do not guarantee you will appear</strong> in any AI's answers. Nobody can:
+        the models decide on their own and change their answers constantly.</li>
+        <li><strong>I am not, and do not represent,</strong> OpenAI, Google, Perplexity, Yelp or any
+        of the platforms named in the report.</li>
+        <li><strong>I don't do the work for you.</strong> The report tells you what to do; carrying
+        it out is up to you or whoever you choose.</li>
+        <li><strong>The report is a snapshot.</strong> The same question can get a different answer
+        the next day. That is precisely why monthly monitoring exists.</li>
+      </ul>
+
+      <h3>What you get</h3>
+      <table>
+        <tr><th>Plan</th><th>Price</th><th>What's included</th></tr>
+        <tr><td><strong>Free check</strong></td><td>$0</td>
+            <td>4 questions, live, no signup. Subject to a daily per-visitor limit.</td></tr>
+        <tr><td><strong>Full report</strong></td><td>$99, one-off</td>
+            <td>15 real customer questions, competitor comparison, the sources AI reads in your
+            sector, and a written action plan.</td></tr>
+        <tr><td><strong>Monthly monitoring</strong></td><td>$49/month</td>
+            <td>Everything in the report, repeated monthly, with alerts when you appear, when you
+            drop out and when a competitor passes you.</td></tr>
+      </table>
+
+      <h3>Acceptable use</h3>
+      <ul>
+        <li>The free check has a per-visitor daily cap so the service stays open to everyone.</li>
+        <li>Don't try to bypass that cap with automation, or use the service to analyse businesses
+        in bulk without agreeing it with me first.</li>
+        <li>The report is for you and your business. Show it to whoever you like, but don't resell
+        it as your own product.</li>
+      </ul>
+
+      <h3>Limitation of liability</h3>
+      <p>The service is provided <strong>as is</strong>. I take care that the data is correct, but it
+      depends on answers from third-party models I don't control, so I can't guarantee it is free of
+      errors or complete.</p>
+      <p>In case of a claim, <strong>my liability is limited to the amount you have paid me</strong>
+      in the preceding 12 months. I am not liable for lost profits or indirect damages. None of this
+      limits rights the law grants you on a mandatory basis.</p>
+
+      <h3>Changes</h3>
+      <p>I may update these terms. The date above says when they last changed. If a change is
+      significant and you're a monitoring subscriber, I'll email you first.</p>
+
+      <h3>Governing law</h3>
+      <p>These terms are governed by the laws of the State of Florida, United States.</p>
+
+      <div class="falta"><p><strong>⚠️ To be completed by the owner:</strong> legal or trading name,
+      postal address and, where applicable, business registration number or EIN. Stripe will ask for
+      these to activate payments, and they belong on this page.</p></div>
+    </div>
+  </section>
+
+  <!-- ══════════ PRIVACIDAD ══════════ -->
+  <section class="doc" id="privacidad">
+    <div data-lang="es">
+      <h2>3. Privacidad</h2>
+      <p>Resumen en una línea: <strong>no hay cuentas, no hay contraseñas y el análisis no se guarda
+      en ningún servidor.</strong></p>
+
+      <h3>Qué pasa cuando pulsas "Analizar mi negocio"</h3>
+      <ul>
+        <li>El nombre, la ciudad y la actividad que escribes se envían a un servidor intermedio
+        (Cloudflare Workers) que los reenvía al modelo de Google Gemini con búsqueda web activada.</li>
+        <li>La respuesta vuelve a tu navegador y <strong>el informe se dibuja en tu equipo</strong>.</li>
+        <li><strong>Ni el negocio ni la ciudad ni el informe se guardan.</strong> Cuando cierras la
+        pestaña, desaparecen.</li>
+      </ul>
+
+      <h3>Lo único que sí se almacena</h3>
+      <p>Para que nadie agote el servicio, el servidor lleva una cuenta de consultas:</p>
+      <table>
+        <tr><th>Qué</th><th>Para qué</th><th>Cuánto dura</th></tr>
+        <tr><td>Tu dirección IP, usada como etiqueta de un contador</td>
+            <td>Limitar las consultas por visitante y día</td>
+            <td><strong>48 horas</strong>, luego se borra sola</td></tr>
+        <tr><td>Un contador global de consultas del día</td>
+            <td>No pasarme del presupuesto de la API</td>
+            <td><strong>48 horas</strong></td></tr>
+      </table>
+      <p>Es un número, no un historial: se guarda <em>cuántas</em> consultas ha hecho esa IP, nunca
+      <em>cuáles</em>.</p>
+
+      <h3>En tu propio navegador</h3>
+      <p>La web guarda en tu equipo (no en un servidor) tu idioma preferido y, si la usas en modo
+      avanzado, tu clave de API. Se borra vaciando los datos del sitio en tu navegador.</p>
+      <p><strong>No uso cookies de seguimiento, ni analítica, ni píxeles de publicidad.</strong></p>
+
+      <h3>Con quién se comparte</h3>
+      <table>
+        <tr><th>Quién</th><th>Qué recibe</th><th>Por qué</th></tr>
+        <tr><td>Google (Gemini API)</td><td>El texto de la consulta: nombre, ciudad y actividad</td>
+            <td>Es quien genera las respuestas que se analizan</td></tr>
+        <tr><td>Cloudflare</td><td>La petición y tu IP</td><td>Aloja el servidor intermedio</td></tr>
+        <tr><td>GitHub Pages</td><td>Tu IP al cargar la web</td><td>Aloja la página</td></tr>
+        <tr><td>Stripe</td><td>Tus datos de pago, solo si compras</td>
+            <td>Procesa el cobro. Yo nunca veo tu tarjeta</td></tr>
+      </table>
+      <p>No vendo ni cedo datos a nadie más.</p>
+
+      <h3>Si compras</h3>
+      <p>Para entregarte el informe y darte soporte conservo tu correo, el nombre de tu negocio y el
+      identificador de la compra, mientras seas cliente y durante el plazo que exija la ley fiscal.</p>
+
+      <h3>Tus derechos</h3>
+      <p>Puedes pedirme qué datos tuyos tengo, que los corrija o que los borre, escribiendo a
+      <a href="mailto:hugoibel91@gmail.com">hugoibel91@gmail.com</a>. Contesto en 30 días o menos.</p>
+
+      <h3>Menores</h3>
+      <p>El servicio está dirigido a negocios y no a menores de 18 años.</p>
+    </div>
+
+    <div data-lang="en">
+      <h2>3. Privacy</h2>
+      <p>One-line summary: <strong>no accounts, no passwords, and the analysis is never stored on any
+      server.</strong></p>
+
+      <h3>What happens when you press "Analyze my business"</h3>
+      <ul>
+        <li>The name, city and activity you type are sent to an intermediate server (Cloudflare
+        Workers) which forwards them to Google's Gemini model with web search enabled.</li>
+        <li>The answer comes back to your browser and <strong>the report is drawn on your own
+        device</strong>.</li>
+        <li><strong>Neither the business, nor the city, nor the report are stored.</strong> Close the
+        tab and they're gone.</li>
+      </ul>
+
+      <h3>The only thing that is stored</h3>
+      <p>So nobody drains the service, the server keeps a request count:</p>
+      <table>
+        <tr><th>What</th><th>Why</th><th>How long</th></tr>
+        <tr><td>Your IP address, used as a counter label</td>
+            <td>Cap requests per visitor per day</td>
+            <td><strong>48 hours</strong>, then auto-deleted</td></tr>
+        <tr><td>A global daily request counter</td>
+            <td>Stay inside the API budget</td>
+            <td><strong>48 hours</strong></td></tr>
+      </table>
+      <p>It's a number, not a history: it records <em>how many</em> queries an IP made, never
+      <em>which</em> ones.</p>
+
+      <h3>In your own browser</h3>
+      <p>The site stores on your device (not on a server) your preferred language and, if you use
+      advanced mode, your API key. Clearing the site data in your browser removes it.</p>
+      <p><strong>No tracking cookies, no analytics, no advertising pixels.</strong></p>
+
+      <h3>Who it's shared with</h3>
+      <table>
+        <tr><th>Who</th><th>What they receive</th><th>Why</th></tr>
+        <tr><td>Google (Gemini API)</td><td>The query text: name, city and activity</td>
+            <td>They generate the answers being analysed</td></tr>
+        <tr><td>Cloudflare</td><td>The request and your IP</td><td>Hosts the intermediate server</td></tr>
+        <tr><td>GitHub Pages</td><td>Your IP when loading the site</td><td>Hosts the page</td></tr>
+        <tr><td>Stripe</td><td>Your payment details, only if you buy</td>
+            <td>Processes the payment. I never see your card</td></tr>
+      </table>
+      <p>I don't sell or hand data to anyone else.</p>
+
+      <h3>If you buy</h3>
+      <p>To deliver the report and support you, I keep your email, your business name and the purchase
+      reference for as long as you're a customer and for the period tax law requires.</p>
+
+      <h3>Your rights</h3>
+      <p>You can ask what data of yours I hold, have it corrected, or have it deleted, by emailing
+      <a href="mailto:hugoibel91@gmail.com">hugoibel91@gmail.com</a>. I reply within 30 days.</p>
+
+      <h3>Minors</h3>
+      <p>The service is aimed at businesses, not at people under 18.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer><div class="wrap">
+  <span data-lang="es"><strong>CiteMe</strong> — visibilidad de negocios locales en la IA ·
+    <a href="mailto:hugoibel91@gmail.com">hugoibel91@gmail.com</a> · <a href="./">Volver a la app</a></span>
+  <span data-lang="en"><strong>CiteMe</strong> — AI visibility for local businesses ·
+    <a href="mailto:hugoibel91@gmail.com">hugoibel91@gmail.com</a> · <a href="./">Back to the app</a></span>
+</div></footer>
+
+<script>
+function setLang(l){
+  document.documentElement.lang = l;
+  try{ localStorage.setItem('citeme_lang', l); }catch(e){}
+  document.getElementById('bEs').className = l === 'es' ? 'on' : '';
+  document.getElementById('bEn').className = l === 'en' ? 'on' : '';
+  document.title = l === 'es'
+    ? 'CiteMe · Términos, privacidad y devoluciones'
+    : 'CiteMe · Terms, privacy and refunds';
+}
+/* Respeta el idioma que ya eligió en la app; si no, el del navegador. */
+(function(){
+  var g; try{ g = localStorage.getItem('citeme_lang'); }catch(e){}
+  setLang(g === 'en' || g === 'es' ? g : ((navigator.language||'es').slice(0,2) === 'es' ? 'es' : 'en'));
+})();
+</script>
+</body>
+</html>
